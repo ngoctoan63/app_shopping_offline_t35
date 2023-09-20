@@ -1,5 +1,5 @@
 import 'package:flutter/material.dart';
-import 'package:denshihanbai/pages/auth/login_page.dart';
+import 'package:denshihanbai/pages/auth/sign_in_page.dart';
 import 'package:denshihanbai/pages/home/home_page.dart';
 
 class RootPage extends StatelessWidget {
@@ -10,7 +10,7 @@ class RootPage extends StatelessWidget {
     if (isLogin) {
       return const HomePage();
     } else {
-      return const LoginPage();
+      return const SignInPage();
     }
   }
 }

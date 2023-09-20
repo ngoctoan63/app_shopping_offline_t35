@@ -5,6 +5,9 @@ import 'package:denshihanbai/apps/routers/router_name.dart';
 import 'package:denshihanbai/pages/error/error_page.dart';
 import 'package:denshihanbai/pages/home/home_page.dart';
 
+import '../../pages/auth/create_account_page.dart';
+import '../../pages/auth/sign_in_page.dart';
+
 class RouterCustom {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -12,6 +15,10 @@ class RouterCustom {
         return page(const RootPage());
       case RouterName.homePage:
         return page(const HomePage());
+      case RouterName.signInPage:
+        return page(const SignInPage());
+      case RouterName.createAccountPage:
+        return page(const CreateAccount());
       default:
         return _errorPage();
     }
