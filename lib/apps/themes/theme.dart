@@ -7,12 +7,14 @@ class ThemeCustom {
     primaryColor: mainColors_light,
     textTheme: const TextTheme(
       titleSmall: title_login_light,
+      titleMedium: title_medium_light,
     ),
   );
   static ThemeData darkTheme = ThemeData.dark().copyWith(
     primaryColor: mainColors_dark,
     textTheme: const TextTheme(
       titleSmall: title_login_dark,
+      titleMedium: title_medium_dark,
     ),
   );
 }
@@ -29,4 +31,15 @@ const TextStyle title_login_light = TextStyle(
 );
 const TextStyle title_login_dark = TextStyle(
   color: TextColors_dart,
+);
+
+const TextStyle title_medium_light = TextStyle(
+  color: TextColors_light,
+  fontSize: 24,
+  fontWeight: FontWeight.w700,
+);
+const TextStyle title_medium_dark = TextStyle(
+  color: TextColors_dart,
+  fontSize: 24,
+  fontWeight: FontWeight.w700,
 );
