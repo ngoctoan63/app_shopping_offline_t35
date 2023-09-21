@@ -12,6 +12,11 @@ class ThemeCustom {
   );
   static ThemeData darkTheme = ThemeData.dark().copyWith(
     primaryColor: mainColors_dark,
+    inputDecorationTheme: const InputDecorationTheme(
+      hintStyle: TextStyle(
+        color: Colors.red,
+      ),
+    ),
     textTheme: const TextTheme(
       titleSmall: title_login_dark,
       titleMedium: title_medium_dark,

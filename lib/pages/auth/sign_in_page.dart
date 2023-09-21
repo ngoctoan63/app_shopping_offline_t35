@@ -70,10 +70,7 @@ class _SignInPagePageState extends State<SignInPage> {
                   children: [
                     Text(
                       textGroceryApp,
-                      style: Theme.of(context)
-                          .textTheme
-                          .titleSmall
-                          ?.copyWith(fontSize: 16),
+                      style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 16),
                     ),
                   ],
                 ),
@@ -94,10 +91,9 @@ class _SignInPagePageState extends State<SignInPage> {
                       alignment: Alignment.topLeft,
                       child: Text(
                         textLoginWelcomeBack,
-                        style:
-                            Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: Colors.black,
-                                ),
+                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                              color: Colors.black,
+                            ),
                       ),
                     ),
                     const SizedBox(
@@ -118,13 +114,13 @@ class _SignInPagePageState extends State<SignInPage> {
                     InputField(
                       controller: userNameController,
                       // hintText: textUserNameLabel,
-                      labelText: textUserNameLabel,
+                      hintText: textUserNameLabel,
                       prefixIcon: const Icon(Icons.person),
                     ),
                     InputField(
                       controller: passwordController,
                       // hintText: textPasswordLabel,
-                      labelText: textPasswordLabel,
+                      hintText: textPasswordLabel,
                       prefixIcon: const Icon(Icons.lock),
                       isSecure: true,
                     ),
@@ -135,56 +131,46 @@ class _SignInPagePageState extends State<SignInPage> {
                     const SizedBox(
                       height: 15,
                     ),
-                    Row(
-                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
+                      Wrap(
+                        direction: Axis.horizontal,
+                        crossAxisAlignment: WrapCrossAlignment.center,
+                        spacing: -10,
                         children: [
-                          Wrap(
-                            direction: Axis.horizontal,
-                            crossAxisAlignment: WrapCrossAlignment.center,
-                            spacing: -10,
-                            children: [
-                              Checkbox(
-                                value: keepSignIn,
-                                // checkColor: Colors.amber,
-                                activeColor: Theme.of(context).primaryColor,
-                                shape: RoundedRectangleBorder(
-                                  borderRadius: BorderRadius.circular(3.0),
-                                ),
-                                side: MaterialStateBorderSide.resolveWith(
-                                  (states) => BorderSide(
-                                      width: 2.0,
-                                      color: Theme.of(context).primaryColor),
-                                ),
-                                onChanged: (value) {
-                                  _onRememberMeChanged(value);
-                                },
-                              ),
-                              Text(
-                                textSignInKeepSignIn,
-                                textAlign: TextAlign.left,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleSmall!
-                                    .copyWith(
-                                      color: Theme.of(context).primaryColor,
-                                    ),
-                              )
-                            ],
-                          ),
-                          TextButton(
-                            onPressed: () {},
-                            child: Text(
-                              textSignInForgotPassword,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall!
-                                  .copyWith(
-                                    color: Theme.of(context).primaryColor,
-                                    decoration: TextDecoration.underline,
-                                  ),
+                          Checkbox(
+                            value: keepSignIn,
+                            // checkColor: Colors.amber,
+                            activeColor: Theme.of(context).primaryColor,
+                            shape: RoundedRectangleBorder(
+                              borderRadius: BorderRadius.circular(3.0),
                             ),
+                            side: MaterialStateBorderSide.resolveWith(
+                              (states) => BorderSide(width: 2.0, color: Theme.of(context).primaryColor),
+                            ),
+                            onChanged: (value) {
+                              _onRememberMeChanged(value);
+                            },
                           ),
-                        ]),
+                          Text(
+                            textSignInKeepSignIn,
+                            textAlign: TextAlign.left,
+                            style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                                  color: Theme.of(context).primaryColor,
+                                ),
+                          )
+                        ],
+                      ),
+                      TextButton(
+                        onPressed: () {},
+                        child: Text(
+                          textSignInForgotPassword,
+                          style: Theme.of(context).textTheme.titleSmall!.copyWith(
+                                color: Theme.of(context).primaryColor,
+                                decoration: TextDecoration.underline,
+                              ),
+                        ),
+                      ),
+                    ]),
                     const SizedBox(
                       height: 25,
                     ),
@@ -197,10 +183,7 @@ class _SignInPagePageState extends State<SignInPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ButtonWidget(
-                        title: textSignInDoNotCreateAnAccount,
-                        onTap: onTapCreateAccount,
-                        isFill: false),
+                    ButtonWidget(title: textSignInDoNotCreateAnAccount, onTap: onTapCreateAccount, isFill: false),
                   ],
                 ),
               )
@@ -212,8 +195,9 @@ class _SignInPagePageState extends State<SignInPage> {
             builder: (context, dataProvider, child) => FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Colors.white,
-              onPressed: () =>
-                  {dataProvider.setMode(!dataProvider.isLightMode)},
+              onPressed: () => {
+                dataProvider.setMode(!dataProvider.isLightMode)
+              },
               child: const Icon(Icons.navigation),
             ),
           ),

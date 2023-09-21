@@ -12,20 +12,12 @@ class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
-    print("------get OS theme mode");
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
-    print(isDarkMode);
-    checkFirstSeen();
     return ChangeNotifierProvider(
-        create: (context) => DataProvider()..setMode(!isDarkMode),
-        child: const App());
-  }
-
-  Future checkFirstSeen() async {
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    bool seen = (prefs.getBool('seen') ?? false);
-    print("Check first run $seen");
+      create: (context) => DataProvider()..setMode(!isDarkMode),
+      child: const App(),
+    );
   }
 }
 
@@ -43,15 +35,14 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
-    print("---------ccc-38");
   }
 
   @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
+  void didChangeAppLifecycleState(AppLifecycleState state) async {
     super.didChangeAppLifecycleState(state);
-    print("App state:$state");
     if (state == AppLifecycleState.inactive) {
-      // context.read<DataProvider>().saveData();
+      final SharedPreferences prefs = await SharedPreferences.getInstance();
+      await prefs.setInt('introduction1', 1);
     }
   }
 
@@ -63,18 +54,15 @@ class _AppState extends State<App> with WidgetsBindingObserver {
 
   @override
   Widget build(BuildContext context) {
-    print("build my app!!!!");
     return Consumer<DataProvider>(
-        builder: (context, value, child) => MaterialApp(
-              debugShowCheckedModeBanner: false,
-              theme: ThemeCustom.lightTheme,
-              darkTheme: ThemeCustom.darkTheme,
-              themeMode: value.themeMode,
-              onGenerateRoute: RouterCustom.onGenerateRoute,
-              // initialRoute: value.isFistRun
-              //     ? RouterName.introductionPage
-              //     : RouterName.signInPage,
-              home: const IntroductionPage(),
-            ));
+      builder: (context, value, child) => MaterialApp(
+        debugShowCheckedModeBanner: false,
+        theme: ThemeCustom.lightTheme,
+        darkTheme: ThemeCustom.darkTheme,
+        themeMode: value.themeMode,
+        initialRoute: RouterName.rootPage,
+        onGenerateRoute: RouterCustom.onGenerateRoute,
+      ),
+    );
   }
 }

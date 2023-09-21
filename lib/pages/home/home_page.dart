@@ -17,8 +17,7 @@ class HomePage extends StatelessWidget {
         children: [
           Consumer<DataProvider>(
               builder: (context, value, child) => Container(
-                    padding:
-                        EdgeInsets.only(left: 25, right: 25, top: height * .01),
+                    padding: EdgeInsets.only(left: 25, right: 25, top: height * .01),
                     height: 100,
                     width: double.infinity,
                     color: Colors.white,
@@ -30,15 +29,11 @@ class HomePage extends StatelessWidget {
                           children: [
                             const Text(
                               textMainGoodMorning,
-                              style:
-                                  TextStyle(fontSize: 14, color: Colors.black),
+                              style: TextStyle(fontSize: 14, color: Colors.black),
                             ),
                             Text(
                               value.userName,
-                              style: const TextStyle(
-                                  fontSize: 24,
-                                  fontWeight: FontWeight.w700,
-                                  color: Colors.black),
+                              style: const TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.black),
                             )
                           ],
                         ),
@@ -60,10 +55,7 @@ class HomePage extends StatelessWidget {
                               height: 45,
                               child: const Text(
                                 "6",
-                                style: TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black),
+                                style: TextStyle(fontSize: 24, fontWeight: FontWeight.w700, color: Colors.black),
                               ),
                             ),
                             Container(

@@ -4,34 +4,26 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DataProvider with ChangeNotifier {
   ThemeMode themeMode = ThemeMode.light;
   bool _isLightMode = true;
-  bool _isFistRun = true;
   String userName = "Luis A.";
-  void setMode(bool lightMode) {
-    _isLightMode = lightMode;
-    themeChanged(_isLightMode);
-    print("change theme mode");
-    checkFirstSeen();
-    notifyListeners();
-  }
+  int isIntroduction = 0;
 
-  Future checkFirstSeen() async {
-    print("check firt run:");
-    SharedPreferences prefs = await SharedPreferences.getInstance();
-    _isFistRun = (prefs.getBool('seen') ?? false);
-    _isFistRun = !_isFistRun;
-    print("_isFistRun:");
-    print(_isFistRun);
+  void changeIstro(int value) {
+    isIntroduction = value;
   }
 
   bool get isLightMode => _isLightMode;
 
-  bool get isFistRun => _isFistRun;
+  void setMode(bool lightMode) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    final int counter = prefs.getInt('introduction1') ?? 0;
+    isIntroduction = counter;
+    _isLightMode = lightMode;
+    themeChanged(_isLightMode);
+    notifyListeners();
+  }
+
   void themeChanged(bool isLight) {
-    if (isLight) {
-      themeMode = ThemeMode.light;
-    } else {
-      themeMode = ThemeMode.dark;
-    }
+    themeMode = isLight ? ThemeMode.light : ThemeMode.dark;
     // notifyListeners();
   }
 }

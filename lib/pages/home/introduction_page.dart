@@ -1,3 +1,4 @@
+import 'package:denshihanbai/provider/data_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
@@ -17,7 +18,10 @@ class OnBoardingPageState extends State<IntroductionPage> {
 
   void _onIntroEnd(context) {
     Navigator.of(context).pushReplacement(
-      MaterialPageRoute(builder: (_) => RootPage(isIntroducted: true)),
+      MaterialPageRoute(
+          builder: (_) => RootPage(
+                numberIntro: 1,
+              )),
     );
   }
 
@@ -50,29 +54,22 @@ class OnBoardingPageState extends State<IntroductionPage> {
     return IntroductionScreen(
       key: introKey,
       globalBackgroundColor: Theme.of(context).primaryColor,
-      allowImplicitScrolling: true,
-      autoScrollDuration: 3000,
-      infiniteAutoScroll: true,
-
       pages: [
         PageViewModel(
           title: "Welcome to Tanam! Grocery Applications",
-          body:
-              "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
+          body: "Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore",
           image: _buildImage('image01.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Learn as you go",
-          body:
-              "Download the Stockpile app and master the market with our mini-lesson.",
+          body: "Download the Stockpile app and master the market with our mini-lesson.",
           image: _buildImage('image02.png'),
           decoration: pageDecoration,
         ),
         PageViewModel(
           title: "Kids and teens",
-          body:
-              "Kids and teens can track their stocks 24/7 and place trades that you approve.",
+          body: "Kids and teens can track their stocks 24/7 and place trades that you approve.",
           image: _buildImage('image03.png'),
           decoration: pageDecoration,
         ),
@@ -97,17 +94,12 @@ class OnBoardingPageState extends State<IntroductionPage> {
       showBackButton: false,
       //rtl: true, // Display as right-to-left
       back: const Icon(Icons.arrow_back),
-      skip: const Text(textIntroductionSkip,
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-      next: const Text(textIntroductionNext,
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
-      done: const Text(textIntroductionDone,
-          style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+      skip: const Text(textIntroductionSkip, style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+      next: const Text(textIntroductionNext, style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
+      done: const Text(textIntroductionDone, style: TextStyle(fontWeight: FontWeight.w600, color: Colors.white)),
       curve: Curves.fastLinearToSlowEaseIn,
       controlsMargin: const EdgeInsets.all(16),
-      controlsPadding: kIsWeb
-          ? const EdgeInsets.all(12.0)
-          : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
+      controlsPadding: kIsWeb ? const EdgeInsets.all(12.0) : const EdgeInsets.fromLTRB(8.0, 4.0, 8.0, 4.0),
       dotsDecorator: const DotsDecorator(
         size: Size(10.0, 10.0),
         color: Color(0xFFBDBDBD),
