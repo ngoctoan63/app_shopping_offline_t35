@@ -24,9 +24,16 @@ const String textSignInDoNotCreateAnAccount = 'CREATE AN ACCOUNT';
 const String textCreateAccountCreateYourAccount = 'Create your account';
 const String textCreateAccountMessage =
     'Laboriosam cupiditate quibusdam libero aut.';
-const String textCreateAccountRegister = 'REGISTER';
+// const String textCreateAccountRegister = 'REGISTER';
+const String textSignInSignUp = 'SIGN UP';
 const String textCreateAccountAlreadyHaveAccount = 'Already have account?';
 const String textCreateByTappingSignUp = 'By tapping “Sign Up” you accept our ';
 const String textCreateTerms = 'terms ';
 const String textCreateAnd = 'and ';
 const String textCreateCondition = 'condition ';
+// introduction text
+const String textIntroductionNext = 'NEXT';
+const String textIntroductionSkip = 'SKIP ';
+const String textIntroductionDone = 'DONE ';
+//main page
+const String textMainGoodMorning = 'Good morning';

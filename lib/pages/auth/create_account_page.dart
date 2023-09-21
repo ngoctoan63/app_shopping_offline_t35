@@ -43,7 +43,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   void onTapSignIn() {
     print('tapped on sign in');
-    Navigator.pushNamed(context, RouterName.signInPage);
+    Navigator.pushReplacementNamed(context, RouterName.signInPage);
   }
 
   @override
@@ -55,14 +55,14 @@ class _CreateAccountState extends State<CreateAccount> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: Theme.of(context).primaryColor,
         body: SingleChildScrollView(
           child: Column(
             mainAxisAlignment: MainAxisAlignment.center,
             children: [
               Container(
-                height: height * 0.25,
+                height: height * 0.2,
                 padding: const EdgeInsets.only(bottom: 10),
                 child: Column(
                   mainAxisAlignment: MainAxisAlignment.end,
@@ -78,8 +78,8 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
               ),
               Container(
-                height: height * 0.75,
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                constraints: BoxConstraints(minHeight: height * 0.8),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -134,8 +134,11 @@ class _CreateAccountState extends State<CreateAccount> {
                       isSecure: true,
                     ),
                     ButtonWidget(
-                      title: textCreateAccountRegister,
+                      title: textSignInSignUp,
                       onTap: onTapRegister,
+                    ),
+                    const SizedBox(
+                      height: 25,
                     ),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -161,16 +164,6 @@ class _CreateAccountState extends State<CreateAccount> {
                                   onAcceptTermsChanged(value);
                                 },
                               ),
-                              // Text(
-                              //   textCreateByTappingSignUp,
-                              //   textAlign: TextAlign.left,
-                              //   style: Theme.of(context)
-                              //       .textTheme
-                              //       .titleSmall!
-                              //       .copyWith(
-                              //         color: const Color(0xFF7D8FAB),
-                              //       ),
-                              // )
                               RichText(
                                 maxLines: 2,
                                 softWrap: true,
@@ -216,7 +209,7 @@ class _CreateAccountState extends State<CreateAccount> {
                           ),
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: 20,
                     ),
                     ButtonWidget(
                         title: textSignInButton,
@@ -231,7 +224,7 @@ class _CreateAccountState extends State<CreateAccount> {
         floatingActionButton: DraggableFab(
           child: Consumer<DataProvider>(
             builder: (context, dataProvider, child) => FloatingActionButton(
-              backgroundColor: Colors.green,
+              backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Colors.white,
               onPressed: () =>
                   {dataProvider.setMode(!dataProvider.isLightMode)},

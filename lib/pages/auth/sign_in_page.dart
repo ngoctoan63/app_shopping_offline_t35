@@ -44,7 +44,7 @@ class _SignInPagePageState extends State<SignInPage> {
     print("tapped on  Create Account");
     // PageTransition(child: createAccountPage, type: PageTransitionType.fade);
     // Navigator.pushNamed(createAccountPage);
-    Navigator.pushNamed(context, RouterName.createAccountPage);
+    Navigator.pushReplacementNamed(context, RouterName.createAccountPage);
   }
 
   @override
@@ -56,7 +56,7 @@ class _SignInPagePageState extends State<SignInPage> {
         FocusManager.instance.primaryFocus?.unfocus();
       },
       child: Scaffold(
-        resizeToAvoidBottomInset: false,
+        resizeToAvoidBottomInset: true,
         backgroundColor: Theme.of(context).primaryColor,
         body: SingleChildScrollView(
           child: Column(
@@ -79,8 +79,8 @@ class _SignInPagePageState extends State<SignInPage> {
                 ),
               ),
               Container(
-                height: height * 0.75,
-                padding: const EdgeInsets.all(20.0),
+                padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
+                constraints: BoxConstraints(minHeight: height * 0.75),
                 decoration: const BoxDecoration(
                   color: Colors.white,
                   borderRadius: BorderRadius.only(
@@ -131,6 +131,9 @@ class _SignInPagePageState extends State<SignInPage> {
                     ButtonWidget(
                       title: textSignInButton,
                       onTap: onTapSignIn,
+                    ),
+                    const SizedBox(
+                      height: 15,
                     ),
                     Row(
                         mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -192,7 +195,7 @@ class _SignInPagePageState extends State<SignInPage> {
                           ),
                     ),
                     const SizedBox(
-                      height: 25,
+                      height: 20,
                     ),
                     ButtonWidget(
                         title: textSignInDoNotCreateAnAccount,
@@ -207,7 +210,7 @@ class _SignInPagePageState extends State<SignInPage> {
         floatingActionButton: DraggableFab(
           child: Consumer<DataProvider>(
             builder: (context, dataProvider, child) => FloatingActionButton(
-              backgroundColor: Colors.green,
+              backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Colors.white,
               onPressed: () =>
                   {dataProvider.setMode(!dataProvider.isLightMode)},

@@ -1,16 +1,31 @@
 import 'package:denshihanbai/provider/data_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:denshihanbai/apps/routers/router.dart';
-import 'package:denshihanbai/apps/routers/router_name.dart';
 import 'package:denshihanbai/apps/themes/theme.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+
+import '../pages/home/introduction_page.dart';
+import 'routers/router_name.dart';
 
 class MyApp extends StatelessWidget {
   const MyApp({super.key});
   @override
   Widget build(BuildContext context) {
+    print("------get OS theme mode");
+    var brightness = MediaQuery.of(context).platformBrightness;
+    bool isDarkMode = brightness == Brightness.dark;
+    print(isDarkMode);
+    checkFirstSeen();
     return ChangeNotifierProvider(
-        create: (context) => DataProvider(), child: const App());
+        create: (context) => DataProvider()..setMode(!isDarkMode),
+        child: const App());
+  }
+
+  Future checkFirstSeen() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    bool seen = (prefs.getBool('seen') ?? false);
+    print("Check first run $seen");
   }
 }
 
@@ -28,6 +43,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
   void initState() {
     super.initState();
     WidgetsBinding.instance.addObserver(this);
+    print("---------ccc-38");
   }
 
   @override
@@ -54,8 +70,11 @@ class _AppState extends State<App> with WidgetsBindingObserver {
               theme: ThemeCustom.lightTheme,
               darkTheme: ThemeCustom.darkTheme,
               themeMode: value.themeMode,
-              initialRoute: RouterName.rootPage,
               onGenerateRoute: RouterCustom.onGenerateRoute,
+              // initialRoute: value.isFistRun
+              //     ? RouterName.introductionPage
+              //     : RouterName.signInPage,
+              home: const IntroductionPage(),
             ));
   }
 }

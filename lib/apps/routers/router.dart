@@ -7,12 +7,15 @@ import 'package:denshihanbai/pages/home/home_page.dart';
 
 import '../../pages/auth/create_account_page.dart';
 import '../../pages/auth/sign_in_page.dart';
+import '../../pages/home/introduction_page.dart';
 
 class RouterCustom {
   static Route onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
       case RouterName.rootPage:
-        return page(const RootPage());
+        return page(RootPage());
+      case RouterName.introductionPage:
+        return page(const IntroductionPage());
       case RouterName.homePage:
         return page(const HomePage());
       case RouterName.signInPage:
@@ -28,6 +31,8 @@ class RouterCustom {
     page(const ErrorPage());
   }
 
-  static PageTransition<dynamic> page(Widget routerPage) =>
-      PageTransition(child: routerPage, type: PageTransitionType.fade);
+  static PageTransition<dynamic> page(Widget routerPage) => PageTransition(
+      child: routerPage,
+      type: PageTransitionType.fade,
+      duration: const Duration(milliseconds: 300));
 }
