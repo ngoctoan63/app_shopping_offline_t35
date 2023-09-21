@@ -41,6 +41,8 @@ dependencies:
   introduction_screen: ^3.1.11
   shared_preferences: ^2.2.1
   after_layout: ^1.2.0
+  firebase_core: ^2.16.0
+  firebase_auth: ^4.10.0
 
 dev_dependencies:
   flutter_test:

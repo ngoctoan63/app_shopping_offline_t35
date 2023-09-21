@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "524232872287",
+    "project_id": "densihanbai",
+    "storage_bucket": "densihanbai.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:524232872287:android:489411400b2c246b2466ea",
+        "android_client_info": {
+          "package_name": "com.example.denshihanbai"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyDVx5VFQ-4fMqeeC9zOtN2nO_tQWuqmfEI"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}

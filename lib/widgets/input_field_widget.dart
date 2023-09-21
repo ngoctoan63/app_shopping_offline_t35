@@ -33,6 +33,7 @@ class _InputFieldState extends State<InputField> {
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      controller: widget.controller,
       obscureText: _obscureText,
       style: const TextStyle(
         fontSize: 18,
@@ -52,13 +53,17 @@ class _InputFieldState extends State<InputField> {
         hintText: widget.hintText,
         floatingLabelStyle: TextStyle(color: Theme.of(context).primaryColor),
         focusedBorder: OutlineInputBorder(
-          borderSide: BorderSide(color: Theme.of(context).primaryColor, width: 2.0),
+          borderSide:
+              BorderSide(color: Theme.of(context).primaryColor, width: 2.0),
           borderRadius: BorderRadius.circular(10.0),
         ),
         helperText: widget.helperText,
         // iconColor: Theme.of(context).primaryColor,
         prefixIcon: widget.prefixIcon,
-        prefixIconColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.focused) ? Theme.of(context).primaryColor : Colors.grey),
+        prefixIconColor: MaterialStateColor.resolveWith((states) =>
+            states.contains(MaterialState.focused)
+                ? Theme.of(context).primaryColor
+                : Colors.grey),
         suffixIcon: widget.isSecure
             ? GestureDetector(
                 onTap: () {
@@ -71,7 +76,10 @@ class _InputFieldState extends State<InputField> {
                 ),
               )
             : null,
-        suffixIconColor: MaterialStateColor.resolveWith((states) => states.contains(MaterialState.focused) ? Theme.of(context).primaryColor : Colors.grey),
+        suffixIconColor: MaterialStateColor.resolveWith((states) =>
+            states.contains(MaterialState.focused)
+                ? Theme.of(context).primaryColor
+                : Colors.grey),
       ),
     );
   }

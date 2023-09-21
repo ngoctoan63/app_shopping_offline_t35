@@ -6,6 +6,7 @@ import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pages/home/introduction_page.dart';
+import '../provider/auth_provider.dart';
 import 'routers/router_name.dart';
 
 class MyApp extends StatelessWidget {
@@ -14,8 +15,14 @@ class MyApp extends StatelessWidget {
   Widget build(BuildContext context) {
     var brightness = MediaQuery.of(context).platformBrightness;
     bool isDarkMode = brightness == Brightness.dark;
-    return ChangeNotifierProvider(
-      create: (context) => DataProvider()..setMode(!isDarkMode),
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+            create: (_) => DataProvider()..setMode(!isDarkMode)),
+        ChangeNotifierProvider(
+          create: (_) => AuthProvider(),
+        ),
+      ],
       child: const App(),
     );
   }

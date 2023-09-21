@@ -1,3 +1,4 @@
+import 'package:denshihanbai/provider/auth_provider.dart';
 import 'package:flutter/material.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:page_transition/page_transition.dart';
@@ -39,10 +40,17 @@ class _CreateAccountState extends State<CreateAccount> {
       });
   void onTapRegister() {
     print('tapped on register');
+    print(emailController.text);
+    print(passwordController.text);
+
+    context
+        .read<AuthProvider>()
+        .createUser(emailController.text, passwordController.text);
   }
 
   void onTapSignIn() {
     print('tapped on sign in');
+
     Navigator.pushReplacementNamed(context, RouterName.signInPage);
   }
 

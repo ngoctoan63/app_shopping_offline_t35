@@ -5,6 +5,11 @@ import '../const/value.dart';
 class ThemeCustom {
   static ThemeData lightTheme = ThemeData.light().copyWith(
     primaryColor: mainColors_light,
+    inputDecorationTheme: const InputDecorationTheme(
+      hintStyle: TextStyle(
+        color: Colors.grey,
+      ),
+    ),
     textTheme: const TextTheme(
       titleSmall: title_login_light,
       titleMedium: title_medium_light,
@@ -14,7 +19,7 @@ class ThemeCustom {
     primaryColor: mainColors_dark,
     inputDecorationTheme: const InputDecorationTheme(
       hintStyle: TextStyle(
-        color: Colors.red,
+        color: Colors.grey,
       ),
     ),
     textTheme: const TextTheme(
