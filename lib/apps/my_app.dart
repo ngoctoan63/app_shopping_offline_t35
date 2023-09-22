@@ -7,6 +7,7 @@ import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pages/home/introduction_page.dart';
 import '../provider/auth_provider.dart';
+import 'const/value.dart';
 import 'routers/router_name.dart';
 
 class MyApp extends StatelessWidget {
@@ -49,7 +50,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.inactive) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setInt('introduction1', 1);
+      await prefs.setInt(introduction, 1);
     }
   }
 

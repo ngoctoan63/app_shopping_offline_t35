@@ -1,3 +1,4 @@
+import 'package:denshihanbai/apps/const/value.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -6,7 +7,7 @@ class DataProvider with ChangeNotifier {
   bool _isLightMode = true;
   String userName = "Luis A.";
   int isIntroduction = 0;
-
+  int notifyCount = 0;
   void changeIstro(int value) {
     isIntroduction = value;
   }
@@ -15,7 +16,7 @@ class DataProvider with ChangeNotifier {
 
   void setMode(bool lightMode) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    final int counter = prefs.getInt('introduction1') ?? 0;
+    final int counter = prefs.getInt(introduction) ?? 0;
     isIntroduction = counter;
     _isLightMode = lightMode;
     themeChanged(_isLightMode);

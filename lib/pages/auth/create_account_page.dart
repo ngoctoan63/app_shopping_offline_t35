@@ -33,24 +33,21 @@ class _CreateAccountState extends State<CreateAccount> {
 
   bool AcceptTerms = false;
   void onAcceptTermsChanged(newValue) => setState(() {
-        AcceptTerms = newValue;
-
-        if (AcceptTerms) {
-        } else {}
+        setState(() {
+          AcceptTerms = newValue;
+        });
       });
   void onTapRegister() {
-    print('tapped on register');
-    print(emailController.text);
-    print(passwordController.text);
-
-    context
-        .read<AuthProvider>()
-        .createUser(emailController.text, passwordController.text);
+    try {
+      context
+          .read<AuthProvider>()
+          .createUser(context, emailController.text, passwordController.text);
+    } on Exception catch (ex) {
+      print('-----------EX:$ex.toString()');
+    }
   }
 
   void onTapSignIn() {
-    print('tapped on sign in');
-
     Navigator.pushReplacementNamed(context, RouterName.signInPage);
   }
 
@@ -141,9 +138,13 @@ class _CreateAccountState extends State<CreateAccount> {
                       prefixIcon: const Icon(Icons.lock),
                       isSecure: true,
                     ),
-                    ButtonWidget(
-                      title: textSignInSignUp,
-                      onTap: onTapRegister,
+                    AbsorbPointer(
+                      absorbing: !AcceptTerms,
+                      child: ButtonWidget(
+                        title: textSignInSignUp,
+                        onTap: onTapRegister,
+                        enable: AcceptTerms,
+                      ),
                     ),
                     const SizedBox(
                       height: 25,
@@ -236,7 +237,10 @@ class _CreateAccountState extends State<CreateAccount> {
               foregroundColor: Colors.white,
               onPressed: () =>
                   {dataProvider.setMode(!dataProvider.isLightMode)},
-              child: const Icon(Icons.navigation),
+              child: const Icon(
+                Icons.change_circle,
+                size: 30,
+              ),
             ),
           ),
         ),

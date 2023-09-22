@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 
+// prefs variable
+const String introduction = "introduction";
+
+//---------- langues --------//
 const String textButtonError = 'Quay ve trang chu';
-
 const String textUserNameLabel = 'User Name';
-
 const String textUserNameHint = 'Alphabet numeric character';
 const String textPasswordLabel = 'Password';
 const String textPasswordHint = 'From 6 to 12 characters';
@@ -36,4 +38,6 @@ const String textIntroductionNext = 'NEXT';
 const String textIntroductionSkip = 'SKIP ';
 const String textIntroductionDone = 'DONE ';
 //main page
-const String textMainGoodMorning = 'Good morning';
+const String textMainGoodMorning = 'Good Morning!';
+const String textMainGoodAfternoon = 'Good Afternoon!';
+const String textMainGoodEvening = 'Good Evening!';

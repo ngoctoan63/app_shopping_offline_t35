@@ -8,9 +8,11 @@ class ButtonWidget extends StatelessWidget {
     required this.title,
     required this.onTap,
     this.isFill = true,
+    this.enable = true,
   });
   String title;
   bool isFill;
+  bool enable;
 
   final VoidCallback onTap;
   @override
@@ -21,13 +23,15 @@ class ButtonWidget extends StatelessWidget {
         height: 60,
         decoration: isFill
             ? BoxDecoration(
-                color: Theme.of(context).primaryColor,
+                color: enable ? Theme.of(context).primaryColor : Colors.grey,
                 borderRadius: const BorderRadius.all(
                   Radius.circular(12.0),
                 ),
                 boxShadow: [
                     BoxShadow(
-                      color: Theme.of(context).primaryColor.withOpacity(0.4),
+                      color: enable
+                          ? Theme.of(context).primaryColor.withOpacity(0.4)
+                          : Colors.grey,
                       spreadRadius: 0,
                       blurRadius: 12,
                       offset: const Offset(0, 10),

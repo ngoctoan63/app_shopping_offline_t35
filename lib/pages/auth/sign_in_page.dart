@@ -4,6 +4,7 @@ import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
 import '../../apps/const/value.dart';
 import '../../apps/routers/router_name.dart';
+import '../../provider/auth_provider.dart';
 import '../../provider/data_provider.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/input_field_widget.dart';
@@ -26,7 +27,7 @@ class _SignInPagePageState extends State<SignInPage> {
   }
 
   //controller
-  TextEditingController userNameController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
   bool keepSignIn = false;
@@ -38,6 +39,13 @@ class _SignInPagePageState extends State<SignInPage> {
       });
   void onTapSignIn() {
     print("tapped on sign in");
+    try {
+      context
+          .read<AuthProvider>()
+          .signIn(context, emailController.text, passwordController.text);
+    } on Exception catch (ex) {
+      print('-----------EX:$ex.toString()');
+    }
   }
 
   void onTapCreateAccount() {
@@ -70,7 +78,10 @@ class _SignInPagePageState extends State<SignInPage> {
                   children: [
                     Text(
                       textGroceryApp,
-                      style: Theme.of(context).textTheme.titleSmall?.copyWith(fontSize: 16),
+                      style: Theme.of(context)
+                          .textTheme
+                          .titleSmall
+                          ?.copyWith(fontSize: 16),
                     ),
                   ],
                 ),
@@ -91,9 +102,10 @@ class _SignInPagePageState extends State<SignInPage> {
                       alignment: Alignment.topLeft,
                       child: Text(
                         textLoginWelcomeBack,
-                        style: Theme.of(context).textTheme.titleMedium!.copyWith(
-                              color: Colors.black,
-                            ),
+                        style:
+                            Theme.of(context).textTheme.titleMedium!.copyWith(
+                                  color: Colors.black,
+                                ),
                       ),
                     ),
                     const SizedBox(
@@ -112,10 +124,10 @@ class _SignInPagePageState extends State<SignInPage> {
                       height: 10,
                     ),
                     InputField(
-                      controller: userNameController,
-                      // hintText: textUserNameLabel,
-                      hintText: textUserNameLabel,
-                      prefixIcon: const Icon(Icons.person),
+                      controller: emailController,
+                      hintText: textEmailHint,
+                      // labelText: textEmailLabel,
+                      prefixIcon: const Icon(Icons.mail),
                     ),
                     InputField(
                       controller: passwordController,
@@ -131,46 +143,56 @@ class _SignInPagePageState extends State<SignInPage> {
                     const SizedBox(
                       height: 15,
                     ),
-                    Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
-                      Wrap(
-                        direction: Axis.horizontal,
-                        crossAxisAlignment: WrapCrossAlignment.center,
-                        spacing: -10,
+                    Row(
+                        mainAxisAlignment: MainAxisAlignment.spaceBetween,
                         children: [
-                          Checkbox(
-                            value: keepSignIn,
-                            // checkColor: Colors.amber,
-                            activeColor: Theme.of(context).primaryColor,
-                            shape: RoundedRectangleBorder(
-                              borderRadius: BorderRadius.circular(3.0),
-                            ),
-                            side: MaterialStateBorderSide.resolveWith(
-                              (states) => BorderSide(width: 2.0, color: Theme.of(context).primaryColor),
-                            ),
-                            onChanged: (value) {
-                              _onRememberMeChanged(value);
-                            },
-                          ),
-                          Text(
-                            textSignInKeepSignIn,
-                            textAlign: TextAlign.left,
-                            style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                                  color: Theme.of(context).primaryColor,
+                          Wrap(
+                            direction: Axis.horizontal,
+                            crossAxisAlignment: WrapCrossAlignment.center,
+                            spacing: -10,
+                            children: [
+                              Checkbox(
+                                value: keepSignIn,
+                                // checkColor: Colors.amber,
+                                activeColor: Theme.of(context).primaryColor,
+                                shape: RoundedRectangleBorder(
+                                  borderRadius: BorderRadius.circular(3.0),
                                 ),
-                          )
-                        ],
-                      ),
-                      TextButton(
-                        onPressed: () {},
-                        child: Text(
-                          textSignInForgotPassword,
-                          style: Theme.of(context).textTheme.titleSmall!.copyWith(
-                                color: Theme.of(context).primaryColor,
-                                decoration: TextDecoration.underline,
+                                side: MaterialStateBorderSide.resolveWith(
+                                  (states) => BorderSide(
+                                      width: 2.0,
+                                      color: Theme.of(context).primaryColor),
+                                ),
+                                onChanged: (value) {
+                                  _onRememberMeChanged(value);
+                                },
                               ),
-                        ),
-                      ),
-                    ]),
+                              Text(
+                                textSignInKeepSignIn,
+                                textAlign: TextAlign.left,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleSmall!
+                                    .copyWith(
+                                      color: Theme.of(context).primaryColor,
+                                    ),
+                              )
+                            ],
+                          ),
+                          TextButton(
+                            onPressed: () {},
+                            child: Text(
+                              textSignInForgotPassword,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall!
+                                  .copyWith(
+                                    color: Theme.of(context).primaryColor,
+                                    decoration: TextDecoration.underline,
+                                  ),
+                            ),
+                          ),
+                        ]),
                     const SizedBox(
                       height: 25,
                     ),
@@ -183,7 +205,10 @@ class _SignInPagePageState extends State<SignInPage> {
                     const SizedBox(
                       height: 20,
                     ),
-                    ButtonWidget(title: textSignInDoNotCreateAnAccount, onTap: onTapCreateAccount, isFill: false),
+                    ButtonWidget(
+                        title: textSignInDoNotCreateAnAccount,
+                        onTap: onTapCreateAccount,
+                        isFill: false),
                   ],
                 ),
               )
@@ -195,10 +220,12 @@ class _SignInPagePageState extends State<SignInPage> {
             builder: (context, dataProvider, child) => FloatingActionButton(
               backgroundColor: Theme.of(context).primaryColor,
               foregroundColor: Colors.white,
-              onPressed: () => {
-                dataProvider.setMode(!dataProvider.isLightMode)
-              },
-              child: const Icon(Icons.navigation),
+              onPressed: () =>
+                  {dataProvider.setMode(!dataProvider.isLightMode)},
+              child: const Icon(
+                Icons.change_circle,
+                size: 30,
+              ),
             ),
           ),
         ),
