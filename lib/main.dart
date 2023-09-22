@@ -1,4 +1,5 @@
 import 'package:firebase_core/firebase_core.dart';
+import 'firebase_options.dart';
 import 'package:flutter/material.dart';
 import 'package:denshihanbai/apps/my_app.dart';
 import 'package:firebase_auth/firebase_auth.dart';
@@ -9,7 +10,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 // }
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
-  await Firebase.initializeApp();
+  await Firebase.initializeApp(options: DefaultFirebaseOptions.currentPlatform);
   FirebaseAuth.instance.authStateChanges().listen((User? user) {
     if (user == null) {
       print('User is currently signed out!');
@@ -17,8 +18,8 @@ Future<void> main() async {
       print('User is signed in!');
     }
   });
+  // Ideal time to initialize
+  // await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
+  //...
   runApp(const MyApp());
-// Ideal time to initialize
-// await FirebaseAuth.instance.useAuthEmulator('localhost', 9099);
-//...
 }
