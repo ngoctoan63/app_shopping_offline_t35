@@ -23,7 +23,9 @@ class ButtonWidget extends StatelessWidget {
         height: 60,
         decoration: isFill
             ? BoxDecoration(
-                color: enable ? Theme.of(context).primaryColor : Colors.grey,
+                color: enable
+                    ? Theme.of(context).primaryColor
+                    : const Color.fromARGB(255, 126, 126, 126),
                 borderRadius: const BorderRadius.all(
                   Radius.circular(12.0),
                 ),
@@ -31,10 +33,11 @@ class ButtonWidget extends StatelessWidget {
                     BoxShadow(
                       color: enable
                           ? Theme.of(context).primaryColor.withOpacity(0.4)
-                          : Colors.grey,
+                          : const Color.fromARGB(255, 126, 126, 126),
                       spreadRadius: 0,
                       blurRadius: 12,
                       offset: const Offset(0, 10),
+                      // blurStyle: BlurStyle.inner,
                     )
                   ])
             : BoxDecoration(

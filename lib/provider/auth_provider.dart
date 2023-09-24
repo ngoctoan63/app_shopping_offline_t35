@@ -1,7 +1,10 @@
+import 'package:denshihanbai/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../apps/const/value.dart';
 import '../apps/routers/router_name.dart';
 
 class AuthProvider with ChangeNotifier {
@@ -9,6 +12,7 @@ class AuthProvider with ChangeNotifier {
   String email = "xxx@yyy.com";
   User? user;
   bool isCreateUserSuccess = false;
+  bool keepSignIn = false;
   void createUser(context, String emailAddress, String password,
       [String displayName = '']) async {
     try {
@@ -21,7 +25,7 @@ class AuthProvider with ChangeNotifier {
 
       await user?.updateDisplayName(displayName);
       isCreateUserSuccess = true;
-      await FirebaseAuth.instance.signOut();
+      // await FirebaseAuth.instance.signOut();
       Navigator.pushReplacementNamed(context, RouterName.signInPage);
     } on FirebaseAuthException catch (e) {
       isCreateUserSuccess = false;
@@ -58,6 +62,18 @@ class AuthProvider with ChangeNotifier {
       } else if (e.code == 'wrong-password') {
         print('Wrong password provided for that user.');
       }
+    }
+  }
+
+  void signOut(context) async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(prefsKeepSignIn);
+    try {
+      await FirebaseAuth.instance.signOut();
+      Navigator.pushReplacementNamed(context, RouterName.signInPage);
+    } on FirebaseAuthException catch (e) {
+      print('Exception on sign out!!!!');
+      print(e.message);
     }
   }
 }

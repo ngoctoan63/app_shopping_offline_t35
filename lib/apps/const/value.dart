@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 // prefs variable
-const String introduction = "introduction";
+const String prefsIntroduction = "introduction";
+const String prefsEmail = "email";
+const String prefsPassword = "password";
+const String prefsKeepSignIn = "keepSignIn";
 
 //---------- langues --------//
 const String textButtonError = 'Quay ve trang chu';
@@ -41,3 +44,5 @@ const String textIntroductionDone = 'DONE ';
 const String textMainGoodMorning = 'Good Morning!';
 const String textMainGoodAfternoon = 'Good Afternoon!';
 const String textMainGoodEvening = 'Good Evening!';
+//home page
+const String textCategories = 'Categories';

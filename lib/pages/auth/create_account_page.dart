@@ -55,6 +55,7 @@ class _CreateAccountState extends State<CreateAccount> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    Color? color;
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -85,9 +86,9 @@ class _CreateAccountState extends State<CreateAccount> {
               Container(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                 constraints: BoxConstraints(minHeight: height * 0.8),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: color ?? Theme.of(context).primaryColorLight,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                   ),
@@ -100,7 +101,7 @@ class _CreateAccountState extends State<CreateAccount> {
                         textCreateAccountCreateYourAccount,
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: Colors.black,
+                                  color: Theme.of(context).primaryColorDark,
                                 ),
                       ),
                     ),

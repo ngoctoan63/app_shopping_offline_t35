@@ -19,7 +19,7 @@ class OnBoardingPageState extends State<IntroductionPage> {
 
   void _onIntroEnd(context) async {
     final SharedPreferences prefs = await SharedPreferences.getInstance();
-    await prefs.setInt(introduction, 1);
+    await prefs.setInt(prefsIntroduction, 1);
     Navigator.of(context).pushReplacement(
       MaterialPageRoute(
           builder: (_) => RootPage(

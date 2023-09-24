@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:provider/provider.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import '../../apps/const/value.dart';
 import '../../apps/routers/router_name.dart';
 import '../../provider/auth_provider.dart';
@@ -31,12 +32,19 @@ class _SignInPagePageState extends State<SignInPage> {
   TextEditingController passwordController = TextEditingController();
 
   bool keepSignIn = false;
-  void _onRememberMeChanged(newValue) => setState(() {
-        keepSignIn = newValue;
+  void _onKeepSignInChanged(newValue) async {
+    setState(() {
+      keepSignIn = newValue;
+    });
 
-        if (keepSignIn) {
-        } else {}
-      });
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    if (keepSignIn) {
+      await prefs.setBool(prefsKeepSignIn, keepSignIn);
+    } else {
+      await prefs.remove(prefsKeepSignIn);
+    }
+  }
+
   void onTapSignIn() {
     print("tapped on sign in");
     try {
@@ -59,6 +67,7 @@ class _SignInPagePageState extends State<SignInPage> {
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
     double height = MediaQuery.of(context).size.height;
+    Color? color;
     return GestureDetector(
       onTap: () {
         FocusManager.instance.primaryFocus?.unfocus();
@@ -89,9 +98,9 @@ class _SignInPagePageState extends State<SignInPage> {
               Container(
                 padding: const EdgeInsets.only(left: 20, right: 20, top: 20),
                 constraints: BoxConstraints(minHeight: height * 0.75),
-                decoration: const BoxDecoration(
-                  color: Colors.white,
-                  borderRadius: BorderRadius.only(
+                decoration: BoxDecoration(
+                  color: color ?? Theme.of(context).primaryColorLight,
+                  borderRadius: const BorderRadius.only(
                     topLeft: Radius.circular(30.0),
                     topRight: Radius.circular(30.0),
                   ),
@@ -104,7 +113,7 @@ class _SignInPagePageState extends State<SignInPage> {
                         textLoginWelcomeBack,
                         style:
                             Theme.of(context).textTheme.titleMedium!.copyWith(
-                                  color: Colors.black,
+                                  color: Theme.of(context).primaryColorDark,
                                 ),
                       ),
                     ),
@@ -164,7 +173,7 @@ class _SignInPagePageState extends State<SignInPage> {
                                       color: Theme.of(context).primaryColor),
                                 ),
                                 onChanged: (value) {
-                                  _onRememberMeChanged(value);
+                                  _onKeepSignInChanged(value);
                                 },
                               ),
                               Text(

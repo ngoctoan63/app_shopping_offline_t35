@@ -1,4 +1,5 @@
 import 'package:denshihanbai/provider/data_provider.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:denshihanbai/apps/routers/router.dart';
 import 'package:denshihanbai/apps/themes/theme.dart';
@@ -50,8 +51,9 @@ class _AppState extends State<App> with WidgetsBindingObserver {
     super.didChangeAppLifecycleState(state);
     if (state == AppLifecycleState.inactive) {
       final SharedPreferences prefs = await SharedPreferences.getInstance();
-      await prefs.setInt(introduction, 1);
+      await prefs.setInt(prefsIntroduction, 1);
     }
+    print(state);
   }
 
   @override
