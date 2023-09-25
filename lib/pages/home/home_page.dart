@@ -11,6 +11,10 @@ import '../../provider/data_provider.dart';
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
 
+  Widget _buildCategoryImage(String assetName, [double width = 350]) {
+    return Image.asset('assets/images/categories$assetName.png', width: width);
+  }
+
   @override
   Widget build(BuildContext context) {
     double width = MediaQuery.of(context).size.width;
@@ -36,9 +40,8 @@ class HomePage extends StatelessWidget {
           Consumer<AuthProvider>(
               builder: (context, value, child) => Container(
                     padding:
-                        EdgeInsets.only(left: 25, right: 25, top: height * .04),
+                        const EdgeInsets.only(left: 25, right: 25, top: 25),
                     height: 100,
-                    // width: double.infinity,
                     color: Theme.of(context).primaryColorLight,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,17 +56,17 @@ class HomePage extends StatelessWidget {
                                   .textTheme
                                   .titleSmall
                                   ?.copyWith(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       color:
                                           Theme.of(context).primaryColorDark),
                             ),
                             Text(
-                              value.email,
+                              value.displayName,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium
                                   ?.copyWith(
-                                      fontSize: 16,
+                                      fontSize: 20,
                                       color:
                                           Theme.of(context).primaryColorDark),
                             )
@@ -240,28 +243,55 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   ),
-                  // Expanded(
-                  //   child: Consumer<DataProvider>(
-                  //     builder: (_, data, __) => Expanded(
-                  //       child: ListView.builder(
-                  //           scrollDirection: Axis.horizontal,
-                  //           itemCount: data.categoriesList.length,
-                  //           itemBuilder: (context, index) {
-                  //             return SizedBox(
-                  //               height: width / 4 + 4,
-                  //               width: width / 4,
-                  //               child: Card(
-                  //                 color: Colors.amber,
-                  //                 child: Text(
-                  //                   data.categoriesList[index],
-                  //                   style: const TextStyle(color: Colors.white),
-                  //                 ),
-                  //               ),
-                  //             );
-                  //           }),
-                  //     ),
-                  //   ),
-                  // )
+                  Expanded(
+                    child: Consumer<DataProvider>(
+                      builder: (_, data, __) => Expanded(
+                          child: ListView.separated(
+                        scrollDirection: Axis.horizontal,
+                        itemCount: data.categoriesList.length,
+                        separatorBuilder: (BuildContext context, int index) =>
+                            const SizedBox(
+                          width: 10,
+                        ),
+                        itemBuilder: (BuildContext context, int index) {
+                          return Container(
+                            height: width / 4 + 4,
+                            width: width / 4,
+                            decoration: BoxDecoration(
+                              color: colorCategories[index],
+                              borderRadius: BorderRadius.circular(10.0),
+                            ),
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Text(
+                                  data.categoriesList[index],
+                                  style: const TextStyle(color: Colors.white),
+                                ),
+                              ],
+                            ),
+                          );
+                        },
+                      )
+                          //   child: ListView.builder(
+                          //       scrollDirection: Axis.horizontal,
+                          //       itemCount: data.categoriesList.length,
+                          //       itemBuilder: (context, index) {
+                          //         return SizedBox(
+                          //           height: width / 4 + 4,
+                          //           width: width / 4,
+                          //           child: Container(
+                          //             color: Colors.amber,
+                          //             child: Text(
+                          //               data.categoriesList[index],
+                          //               style: const TextStyle(color: Colors.white),
+                          //             ),
+                          //           ),
+                          //         );
+                          //       }),
+                          ),
+                    ),
+                  )
                 ]),
           ),
         ],
