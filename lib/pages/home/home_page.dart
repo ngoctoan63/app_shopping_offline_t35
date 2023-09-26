@@ -1,12 +1,15 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:denshihanbai/provider/auth_provider.dart';
+import 'package:denshihanbai/utilities/ultilities_function.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../apps/const/value.dart';
+import '../../apps/routers/router_name.dart';
 import '../../provider/data_provider.dart';
+import '../../widgets/category_item_widget.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -36,9 +39,8 @@ class HomePage extends StatelessWidget {
           Consumer<AuthProvider>(
               builder: (context, value, child) => Container(
                     padding:
-                        EdgeInsets.only(left: 25, right: 25, top: height * .04),
+                        const EdgeInsets.only(left: 25, right: 25, top: 25),
                     height: 100,
-                    // width: double.infinity,
                     color: Theme.of(context).primaryColorLight,
                     child: Row(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
@@ -53,17 +55,17 @@ class HomePage extends StatelessWidget {
                                   .textTheme
                                   .titleSmall
                                   ?.copyWith(
-                                      fontSize: 16,
+                                      fontSize: 14,
                                       color:
                                           Theme.of(context).primaryColorDark),
                             ),
                             Text(
-                              value.email,
+                              value.displayName,
                               style: Theme.of(context)
                                   .textTheme
                                   .titleMedium
                                   ?.copyWith(
-                                      fontSize: 16,
+                                      fontSize: 20,
                                       color:
                                           Theme.of(context).primaryColorDark),
                             )
@@ -183,7 +185,7 @@ class HomePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                       image: const DecorationImage(
                         image: NetworkImage(
-                            "https://media.istockphoto.com/id/1322277517/vi/anh/c%E1%BB%8F-d%E1%BA%A1i-tr%C3%AAn-n%C3%BAi-l%C3%BAc-ho%C3%A0ng-h%C3%B4n.jpg?s=612x612&w=0&k=20&c=ng_7l3FyBObY5ZJq2BgWCkOKct9Qk6ITFnCC2r55IKQ="),
+                            "https://cdn.pixabay.com/photo/2023/03/28/07/51/trees-7882545_1280.jpg"),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -194,7 +196,7 @@ class HomePage extends StatelessWidget {
                       borderRadius: BorderRadius.circular(10.0),
                       image: const DecorationImage(
                         image: NetworkImage(
-                            "https://media.istockphoto.com/id/1322277517/vi/anh/c%E1%BB%8F-d%E1%BA%A1i-tr%C3%AAn-n%C3%BAi-l%C3%BAc-ho%C3%A0ng-h%C3%B4n.jpg?s=612x612&w=0&k=20&c=ng_7l3FyBObY5ZJq2BgWCkOKct9Qk6ITFnCC2r55IKQ="),
+                            "https://media.istockphoto.com/id/1176579445/vi/anh/m%E1%BA%B7t-tr%E1%BB%9Di-chi%E1%BA%BFu-qua-m%E1%BB%99t-c%C3%A1i-c%C3%A2y-trong-c%E1%BA%A3nh-quan-n%C3%B4ng-th%C3%B4n.jpg?s=2048x2048&w=is&k=20&c=9IXT11XeEmIPXu_mAhXlS1gbLzctGkL60IUUjNvlnj0="),
                         fit: BoxFit.cover,
                       ),
                     ),
@@ -214,7 +216,7 @@ class HomePage extends StatelessWidget {
             ]),
           ),
           Container(
-            height: 140,
+            height: 150,
             width: double.infinity,
             color: Theme.of(context).primaryColorLight,
             child: Column(
@@ -232,36 +234,60 @@ class HomePage extends StatelessWidget {
                               fontWeight: FontWeight.w700,
                               color: Theme.of(context).primaryColorDark),
                         ),
-                        const Icon(
-                          Icons.chevron_right,
-                          color: Color(0xff7D8FAB),
-                          size: 30,
-                        )
+                        TextButton(
+                          onPressed: () {
+                            Navigator.pushReplacementNamed(
+                                context, RouterName.productCategories);
+                          },
+                          style: TextButton.styleFrom(
+                              padding: EdgeInsets.zero,
+                              minimumSize: const Size(30, 30),
+                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
+                              alignment: Alignment.centerRight),
+                          child: const Icon(
+                            Icons.chevron_right,
+                            color: Color(0xff7D8FAB),
+                            size: 30,
+                          ),
+                        ),
                       ],
                     ),
                   ),
-                  // Expanded(
-                  //   child: Consumer<DataProvider>(
-                  //     builder: (_, data, __) => Expanded(
-                  //       child: ListView.builder(
-                  //           scrollDirection: Axis.horizontal,
-                  //           itemCount: data.categoriesList.length,
-                  //           itemBuilder: (context, index) {
-                  //             return SizedBox(
-                  //               height: width / 4 + 4,
-                  //               width: width / 4,
-                  //               child: Card(
-                  //                 color: Colors.amber,
-                  //                 child: Text(
-                  //                   data.categoriesList[index],
-                  //                   style: const TextStyle(color: Colors.white),
-                  //                 ),
-                  //               ),
-                  //             );
-                  //           }),
-                  //     ),
-                  //   ),
-                  // )
+                  Expanded(
+                    child: Column(
+                      children: [
+                        Consumer<DataProvider>(
+                          builder: (_, dataProvider, __) => Expanded(
+                              child: ListView.separated(
+                            scrollDirection: Axis.horizontal,
+                            itemCount: dataProvider.categoriesList.length,
+                            separatorBuilder:
+                                (BuildContext context, int index) =>
+                                    const SizedBox(
+                              width: 10,
+                            ),
+                            itemBuilder: (BuildContext context, int index) {
+                              return Container(
+                                height: width / 4 + 4,
+                                width: width / 4,
+                                decoration: BoxDecoration(
+                                  color: colorCategories[index],
+                                  borderRadius: BorderRadius.circular(10.0),
+                                ),
+                                child: categoryItemWidget(
+                                  title: dataProvider.categoriesList[index]
+                                      .capitalize(),
+                                  assetImagePath:
+                                      'assets/images/categories/${dataProvider.categoriesList[index]}.png',
+                                  itemsCount: 45,
+                                ),
+                              );
+                            },
+                          )),
+                        ),
+                      ],
+                    ),
+                  )
                 ]),
           ),
         ],

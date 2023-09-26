@@ -1,3 +1,4 @@
+import 'package:denshihanbai/pages/product_categories.dart';
 import 'package:flutter/material.dart';
 import 'package:page_transition/page_transition.dart';
 import 'package:denshihanbai/apps/root_page.dart';
@@ -22,6 +23,8 @@ class RouterCustom {
         return page(const SignInPage());
       case RouterName.createAccountPage:
         return page(const CreateAccount());
+      case RouterName.productCategories:
+        return page(const ProductCategories());
       default:
         return _errorPage();
     }

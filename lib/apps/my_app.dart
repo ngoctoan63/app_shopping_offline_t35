@@ -1,3 +1,4 @@
+import 'package:denshihanbai/pages/product_categories.dart';
 import 'package:denshihanbai/provider/data_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
@@ -72,6 +73,7 @@ class _AppState extends State<App> with WidgetsBindingObserver {
         themeMode: value.themeMode,
         initialRoute: RouterName.rootPage,
         onGenerateRoute: RouterCustom.onGenerateRoute,
+        // home: const ProductCategories(),
       ),
     );
   }
