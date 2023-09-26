@@ -46,14 +46,3 @@ const String textMainGoodAfternoon = 'Good Afternoon!';
 const String textMainGoodEvening = 'Good Evening!';
 //home page
 const String textCategories = 'Categories';
-
-const List<Color> colorCategories = [
-  Color(0xff28B0CE),
-  Color(0xff2E65CF),
-  Color(0xff1CBD5C),
-  Color(0xffE85276),
-  Color(0xffEF962E),
-  Color(0xff14AB87),
-  Color(0xffAE7156),
-  Color(0xffA131AD),
-];

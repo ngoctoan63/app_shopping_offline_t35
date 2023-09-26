@@ -39,8 +39,9 @@ class _CreateAccountState extends State<CreateAccount> {
       });
   void onTapRegister() {
     try {
-      context.read<AuthProvider>().createUser(context, emailController.text,
-          passwordController.text, userNameController.text);
+      context
+          .read<AuthProvider>()
+          .createUser(context, emailController.text, passwordController.text);
     } on Exception catch (ex) {
       print('-----------EX:$ex.toString()');
     }

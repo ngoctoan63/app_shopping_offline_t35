@@ -52,9 +52,8 @@ class AuthProvider with ChangeNotifier {
       user = FirebaseAuth.instance.currentUser;
       if (user != null) {
         // displayName = name!;
-        final eMail = user!.email;
-        displayName = email = eMail!;
-        if (user!.displayName != null) displayName = (user!.displayName)!;
+        final eMail = user?.email;
+        email = eMail!;
       }
       Navigator.pushReplacementNamed(context, RouterName.homePage);
     } on FirebaseAuthException catch (e) {
