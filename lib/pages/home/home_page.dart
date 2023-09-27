@@ -236,7 +236,7 @@ class HomePage extends StatelessWidget {
                         ),
                         TextButton(
                           onPressed: () {
-                            Navigator.pushReplacementNamed(
+                            Navigator.pushNamed(
                                 context, RouterName.productCategories);
                           },
                           style: TextButton.styleFrom(
@@ -268,13 +268,14 @@ class HomePage extends StatelessWidget {
                             ),
                             itemBuilder: (BuildContext context, int index) {
                               return Container(
-                                height: width / 4 + 4,
+                                height: width / 4,
                                 width: width / 4,
                                 decoration: BoxDecoration(
                                   color: colorCategories[index],
                                   borderRadius: BorderRadius.circular(10.0),
                                 ),
                                 child: categoryItemWidget(
+                                  categoryID: 'caterogy$index',
                                   title: dataProvider.categoriesList[index]
                                       .capitalize(),
                                   assetImagePath:

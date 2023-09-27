@@ -8,6 +8,7 @@ import 'package:denshihanbai/pages/home/home_page.dart';
 
 import '../../pages/auth/create_account_page.dart';
 import '../../pages/auth/sign_in_page.dart';
+import '../../pages/products.dart';
 import '../../pages/home/introduction_page.dart';
 
 class RouterCustom {
@@ -25,6 +26,11 @@ class RouterCustom {
         return page(const CreateAccount());
       case RouterName.productCategories:
         return page(const ProductCategories());
+      case RouterName.productPage:
+        return page(ProductPage(
+          categoryID: 'CID',
+          title: 'Title',
+        ));
       default:
         return _errorPage();
     }
