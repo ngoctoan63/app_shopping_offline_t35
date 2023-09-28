@@ -11,9 +11,8 @@ class AuthProvider with ChangeNotifier {
   String displayName = "";
   String email = "xxx@yyy.com";
   User? user;
-  bool isCreateUserSuccess = false;
   bool keepSignIn = false;
-  void createUser(context, String emailAddress, String password,
+  Future<User?> createUser(String emailAddress, String password,
       [String displayName = '']) async {
     try {
       UserCredential credential =
@@ -24,25 +23,18 @@ class AuthProvider with ChangeNotifier {
       user = FirebaseAuth.instance.currentUser;
 
       await user?.updateDisplayName(displayName);
-      isCreateUserSuccess = true;
-      // await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacementNamed(context, RouterName.signInPage);
+
+      await FirebaseAuth.instance.signOut();
+      return user;
     } on FirebaseAuthException catch (e) {
-      isCreateUserSuccess = false;
-      if (e.code == 'weak-password') {
-        print('The password provided is too weak.');
-        throw Exception(e);
-      } else if (e.code == 'email-already-in-use') {
-        print('The account already exists for that email.');
-        // return Future.error('ccc');
-        throw Exception(e);
-      }
+      throw Exception(e);
     } catch (e) {
-      print(e);
+      print('createUser exception:$e');
     }
+    return null;
   }
 
-  void signIn(context, String emailAddress, String password) async {
+  Future<User?> signIn(String emailAddress, String password) async {
     try {
       UserCredential userCredential =
           await FirebaseAuth.instance.signInWithEmailAndPassword(
@@ -56,14 +48,19 @@ class AuthProvider with ChangeNotifier {
         displayName = email = eMail!;
         if (user!.displayName != null) displayName = (user!.displayName)!;
       }
-      Navigator.pushReplacementNamed(context, RouterName.homePage);
+      return user;
     } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        print('No user found for that email.');
-      } else if (e.code == 'wrong-password') {
-        print('Wrong password provided for that user.');
+      switch (e.code) {
+        case 'INVALID_LOGIN_CREDENTIALS':
+          throw textInvalidLoginCredentials;
+        default:
+          throw textLoginFailed;
       }
+      throw Exception(e);
+    } catch (e) {
+      print('sign in exception:$e');
     }
+    return null;
   }
 
   void signOut(context) async {
@@ -71,7 +68,6 @@ class AuthProvider with ChangeNotifier {
     await prefs.remove(prefsKeepSignIn);
     try {
       await FirebaseAuth.instance.signOut();
-      Navigator.pushReplacementNamed(context, RouterName.signInPage);
     } on FirebaseAuthException catch (e) {
       print('Exception on sign out!!!!');
       print(e.message);

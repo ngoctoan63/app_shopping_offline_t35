@@ -4,8 +4,8 @@ import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../../apps/const/value.dart';
-import '../../apps/root_page.dart';
+import '../apps/const/value.dart';
+import '../apps/root_page.dart';
 
 class IntroductionPage extends StatefulWidget {
   const IntroductionPage({Key? key}) : super(key: key);

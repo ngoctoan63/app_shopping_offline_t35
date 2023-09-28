@@ -46,6 +46,7 @@ const String textMainGoodAfternoon = 'Good Afternoon!';
 const String textMainGoodEvening = 'Good Evening!';
 //home page
 const String textCategories = 'Categories';
+const String textPopularDeals = 'Popular Deals';
 
 const List<Color> colorCategories = [
   Color(0xff28B0CE),
@@ -57,3 +58,7 @@ const List<Color> colorCategories = [
   Color(0xffAE7156),
   Color(0xffA131AD),
 ];
+
+// thông báo
+const String textInvalidLoginCredentials = 'Sign in formation is incorrect!';
+const String textLoginFailed = 'Login failed!';

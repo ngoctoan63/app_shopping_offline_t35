@@ -31,23 +31,45 @@ class _CreateAccountState extends State<CreateAccount> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
-  bool AcceptTerms = false;
+  bool acceptTerms = false;
   void onAcceptTermsChanged(newValue) => setState(() {
         setState(() {
-          AcceptTerms = newValue;
+          acceptTerms = newValue;
         });
       });
-  void onTapRegister() {
+  Future<void> onTapRegister() async {
     try {
-      context.read<AuthProvider>().createUser(context, emailController.text,
-          passwordController.text, userNameController.text);
+      //loading
+      await Future.delayed(const Duration(seconds: 1));
+      await context
+          .read<AuthProvider>()
+          .createUser(emailController.text, passwordController.text,
+              userNameController.text)
+          .onError((error, stackTrace) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.toString())));
+        return null;
+      }).then((user) {
+        if (user != null) {
+          Navigator.pop(context);
+        }
+      });
+      if (!mounted) return;
     } on Exception catch (ex) {
       print('-----------EX:$ex.toString()');
     }
   }
 
   void onTapSignIn() {
-    Navigator.pushReplacementNamed(context, RouterName.signInPage);
+    Navigator.pop(context);
+  }
+
+  @override
+  void dispose() {
+    userNameController.dispose();
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
@@ -139,11 +161,11 @@ class _CreateAccountState extends State<CreateAccount> {
                       isSecure: true,
                     ),
                     AbsorbPointer(
-                      absorbing: !AcceptTerms,
+                      absorbing: !acceptTerms,
                       child: ButtonWidget(
                         title: textSignInSignUp,
                         onTap: onTapRegister,
-                        enable: AcceptTerms,
+                        enable: acceptTerms,
                       ),
                     ),
                     const SizedBox(
@@ -158,7 +180,7 @@ class _CreateAccountState extends State<CreateAccount> {
                             spacing: -5,
                             children: [
                               Checkbox(
-                                value: AcceptTerms,
+                                value: acceptTerms,
                                 // checkColor: Colors.amber,
                                 activeColor: Theme.of(context).primaryColor,
                                 shape: RoundedRectangleBorder(

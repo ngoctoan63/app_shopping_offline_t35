@@ -9,7 +9,7 @@ import 'package:denshihanbai/pages/home/home_page.dart';
 import '../../pages/auth/create_account_page.dart';
 import '../../pages/auth/sign_in_page.dart';
 import '../../pages/products.dart';
-import '../../pages/home/introduction_page.dart';
+import '../../pages/introduction_page.dart';
 
 class RouterCustom {
   static Route onGenerateRoute(RouteSettings settings) {

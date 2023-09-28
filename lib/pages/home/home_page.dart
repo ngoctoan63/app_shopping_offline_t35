@@ -2,7 +2,6 @@ import 'package:carousel_slider/carousel_slider.dart';
 import 'package:denshihanbai/provider/auth_provider.dart';
 import 'package:denshihanbai/utilities/ultilities_function.dart';
 import 'package:draggable_fab/draggable_fab.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -30,7 +29,6 @@ class HomePage extends StatelessWidget {
       default:
         greet = textMainGoodAfternoon;
     }
-    Color? color;
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
       body: Column(
@@ -121,175 +119,236 @@ class HomePage extends StatelessWidget {
                       ],
                     ),
                   )),
-          InkWell(
-            // onTap: onTap,
-            child: Padding(
-              padding: const EdgeInsets.symmetric(horizontal: 28),
-              child: Container(
-                width: double.infinity,
-                height: 60,
-                decoration: BoxDecoration(
-                  color: Theme.of(context).primaryColorLight,
-                  shape: BoxShape.rectangle,
-                  border: Border.all(color: const Color(0xffE8EFF3), width: 1),
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(12.0),
+          Expanded(
+            // color: Colors.black,
+            child: Column(
+              children: [
+                InkWell(
+                  // onTap: onTap,
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 28),
+                    child: Container(
+                      width: double.infinity,
+                      height: 60,
+                      decoration: BoxDecoration(
+                        color: Theme.of(context).primaryColorLight,
+                        shape: BoxShape.rectangle,
+                        border: Border.all(
+                            color: const Color(0xffE8EFF3), width: 1),
+                        borderRadius: const BorderRadius.all(
+                          Radius.circular(12.0),
+                        ),
+                      ),
+                      child: const Center(
+                        child: Row(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          children: [
+                            Icon(
+                              Icons.search,
+                              color: Color(0xff7D8FAB),
+                            ),
+                            SizedBox(
+                              width: 10,
+                            ),
+                            Text(
+                              "Search beverages or foods",
+                              style: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                fontSize: 18,
+                                letterSpacing: 0.0,
+                                color: Color(0xff7D8FAB),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ),
+                    ),
                   ),
                 ),
-                child: const Center(
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    children: [
-                      Icon(
-                        Icons.search,
-                        color: Color(0xff7D8FAB),
+                const SizedBox(
+                  height: 10,
+                ),
+                SizedBox(
+                  width: double.infinity,
+                  child: CarouselSlider(
+                    items: [
+                      Container(
+                        margin: const EdgeInsets.all(0.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: const DecorationImage(
+                            image: NetworkImage(
+                                "https://media.istockphoto.com/id/1322277517/vi/anh/c%E1%BB%8F-d%E1%BA%A1i-tr%C3%AAn-n%C3%BAi-l%C3%BAc-ho%C3%A0ng-h%C3%B4n.jpg?s=612x612&w=0&k=20&c=ng_7l3FyBObY5ZJq2BgWCkOKct9Qk6ITFnCC2r55IKQ="),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                      SizedBox(
-                        width: 10,
+                      Container(
+                        margin: const EdgeInsets.all(0.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: const DecorationImage(
+                            image: NetworkImage(
+                                "https://cdn.pixabay.com/photo/2023/03/28/07/51/trees-7882545_1280.jpg"),
+                            fit: BoxFit.cover,
+                          ),
+                        ),
                       ),
-                      Text(
-                        "Search beverages or foods",
-                        style: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          fontSize: 18,
-                          letterSpacing: 0.0,
-                          color: Color(0xff7D8FAB),
+                      Container(
+                        margin: const EdgeInsets.all(0.0),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(10.0),
+                          image: const DecorationImage(
+                            image: NetworkImage(
+                                "https://media.istockphoto.com/id/1176579445/vi/anh/m%E1%BA%B7t-tr%E1%BB%9Di-chi%E1%BA%BFu-qua-m%E1%BB%99t-c%C3%A1i-c%C3%A2y-trong-c%E1%BA%A3nh-quan-n%C3%B4ng-th%C3%B4n.jpg?s=2048x2048&w=is&k=20&c=9IXT11XeEmIPXu_mAhXlS1gbLzctGkL60IUUjNvlnj0="),
+                            fit: BoxFit.cover,
+                          ),
                         ),
                       ),
                     ],
+                    options: CarouselOptions(
+                      height: 168.0,
+                      enlargeCenterPage: true,
+                      autoPlay: true,
+                      aspectRatio: 16 / 9,
+                      autoPlayCurve: Curves.fastOutSlowIn,
+                      enableInfiniteScroll: true,
+                      autoPlayAnimationDuration:
+                          const Duration(milliseconds: 800),
+                      viewportFraction: 0.8,
+                    ),
                   ),
                 ),
-              ),
-            ),
-          ),
-          Container(
-            height: 220,
-            color: Theme.of(context).primaryColorLight,
-            child: ListView(children: [
-              CarouselSlider(
-                items: [
-                  Container(
-                    margin: const EdgeInsets.all(0.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                            "https://media.istockphoto.com/id/1322277517/vi/anh/c%E1%BB%8F-d%E1%BA%A1i-tr%C3%AAn-n%C3%BAi-l%C3%BAc-ho%C3%A0ng-h%C3%B4n.jpg?s=612x612&w=0&k=20&c=ng_7l3FyBObY5ZJq2BgWCkOKct9Qk6ITFnCC2r55IKQ="),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(0.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                            "https://cdn.pixabay.com/photo/2023/03/28/07/51/trees-7882545_1280.jpg"),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                  Container(
-                    margin: const EdgeInsets.all(0.0),
-                    decoration: BoxDecoration(
-                      borderRadius: BorderRadius.circular(10.0),
-                      image: const DecorationImage(
-                        image: NetworkImage(
-                            "https://media.istockphoto.com/id/1176579445/vi/anh/m%E1%BA%B7t-tr%E1%BB%9Di-chi%E1%BA%BFu-qua-m%E1%BB%99t-c%C3%A1i-c%C3%A2y-trong-c%E1%BA%A3nh-quan-n%C3%B4ng-th%C3%B4n.jpg?s=2048x2048&w=is&k=20&c=9IXT11XeEmIPXu_mAhXlS1gbLzctGkL60IUUjNvlnj0="),
-                        fit: BoxFit.cover,
-                      ),
-                    ),
-                  ),
-                ],
-                options: CarouselOptions(
-                  height: 168.0,
-                  enlargeCenterPage: true,
-                  autoPlay: true,
-                  aspectRatio: 16 / 9,
-                  autoPlayCurve: Curves.fastOutSlowIn,
-                  enableInfiniteScroll: true,
-                  autoPlayAnimationDuration: const Duration(milliseconds: 800),
-                  viewportFraction: 0.8,
-                ),
-              ),
-            ]),
-          ),
-          Container(
-            height: 150,
-            width: double.infinity,
-            color: Theme.of(context).primaryColorLight,
-            child: Column(
-                mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: 28),
-                    child: Row(
+                Container(
+                  height: 150,
+                  width: double.infinity,
+                  color: Theme.of(context).primaryColorLight,
+                  child: Column(
                       mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Text(
-                          textCategories,
-                          style: TextStyle(
-                              fontSize: 18,
-                              fontWeight: FontWeight.w700,
-                              color: Theme.of(context).primaryColorDark),
-                        ),
-                        TextButton(
-                          onPressed: () {
-                            Navigator.pushNamed(
-                                context, RouterName.productCategories);
-                          },
-                          style: TextButton.styleFrom(
-                              padding: EdgeInsets.zero,
-                              minimumSize: const Size(30, 30),
-                              tapTargetSize: MaterialTapTargetSize.shrinkWrap,
-                              alignment: Alignment.centerRight),
-                          child: const Icon(
-                            Icons.chevron_right,
-                            color: Color(0xff7D8FAB),
-                            size: 30,
+                        Padding(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 28, vertical: 10),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Text(
+                                textCategories,
+                                style: TextStyle(
+                                    fontSize: 18,
+                                    fontWeight: FontWeight.w700,
+                                    color: Theme.of(context).primaryColorDark),
+                              ),
+                              TextButton(
+                                onPressed: () {
+                                  Navigator.pushNamed(
+                                      context, RouterName.productCategories);
+                                },
+                                style: TextButton.styleFrom(
+                                    padding: EdgeInsets.zero,
+                                    minimumSize: const Size(30, 30),
+                                    tapTargetSize:
+                                        MaterialTapTargetSize.shrinkWrap,
+                                    alignment: Alignment.centerRight),
+                                child: const Icon(
+                                  Icons.chevron_right,
+                                  color: Color(0xff7D8FAB),
+                                  size: 30,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
-                    ),
-                  ),
-                  Expanded(
-                    child: Column(
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Consumer<DataProvider>(
+                                builder: (_, dataProvider, __) => Expanded(
+                                    child: ListView.separated(
+                                  scrollDirection: Axis.horizontal,
+                                  itemCount: dataProvider.categoriesList.length,
+                                  separatorBuilder:
+                                      (BuildContext context, int index) =>
+                                          const SizedBox(
+                                    width: 10,
+                                  ),
+                                  itemBuilder:
+                                      (BuildContext context, int index) {
+                                    return Container(
+                                      height: width / 4,
+                                      width: width / 4,
+                                      decoration: BoxDecoration(
+                                        color: colorCategories[index],
+                                        borderRadius:
+                                            BorderRadius.circular(10.0),
+                                      ),
+                                      child: categoryItemWidget(
+                                        categoryID: 'caterogy$index',
+                                        title: dataProvider
+                                            .categoriesList[index]
+                                            .capitalize(),
+                                        assetImagePath:
+                                            'assets/images/categories/${dataProvider.categoriesList[index]}.png',
+                                        itemsCount: 45,
+                                      ),
+                                    );
+                                  },
+                                )),
+                              ),
+                            ],
+                          ),
+                        )
+                      ]),
+                ),
+                Expanded(
+                  child: Column(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
                       children: [
-                        Consumer<DataProvider>(
-                          builder: (_, dataProvider, __) => Expanded(
-                              child: ListView.separated(
-                            scrollDirection: Axis.horizontal,
-                            itemCount: dataProvider.categoriesList.length,
-                            separatorBuilder:
-                                (BuildContext context, int index) =>
-                                    const SizedBox(
-                              width: 10,
-                            ),
-                            itemBuilder: (BuildContext context, int index) {
-                              return Container(
-                                height: width / 4,
-                                width: width / 4,
-                                decoration: BoxDecoration(
-                                  color: colorCategories[index],
-                                  borderRadius: BorderRadius.circular(10.0),
-                                ),
-                                child: categoryItemWidget(
-                                  categoryID: 'caterogy$index',
-                                  title: dataProvider.categoriesList[index]
-                                      .capitalize(),
-                                  assetImagePath:
-                                      'assets/images/categories/${dataProvider.categoriesList[index]}.png',
-                                  itemsCount: 45,
-                                ),
-                              );
-                            },
-                          )),
+                        Container(
+                          padding: const EdgeInsets.symmetric(
+                              horizontal: 28, vertical: 10),
+                          alignment: Alignment.centerLeft,
+                          child: Text(
+                            textPopularDeals,
+                            style: TextStyle(
+                                fontSize: 18,
+                                fontWeight: FontWeight.w700,
+                                color: Theme.of(context).primaryColorDark),
+                          ),
                         ),
-                      ],
-                    ),
-                  )
-                ]),
+                        Expanded(
+                          child: Column(
+                            children: [
+                              Consumer<DataProvider>(
+                                builder: (_, dataProvider, __) => Expanded(
+                                  child: GridView.builder(
+                                    physics:
+                                        const NeverScrollableScrollPhysics(),
+                                    shrinkWrap: true,
+                                    gridDelegate:
+                                        const SliverGridDelegateWithFixedCrossAxisCount(
+                                      crossAxisCount: 2,
+                                      mainAxisSpacing: 20,
+                                      crossAxisSpacing: 20,
+                                      childAspectRatio: 1.5 / 2.6,
+                                    ),
+                                    itemCount: 8,
+                                    itemBuilder:
+                                        (BuildContext context, int index) {
+                                      return Container(
+                                        color: Colors.amber,
+                                      );
+                                    },
+                                  ),
+                                ),
+                              ),
+                            ],
+                          ),
+                        )
+                      ]),
+                ),
+              ],
+            ),
           ),
         ],
       ),

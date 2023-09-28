@@ -8,7 +8,7 @@ import 'package:denshihanbai/pages/home/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../pages/home/introduction_page.dart';
+import '../pages/introduction_page.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({
@@ -42,8 +42,14 @@ class _RootPageState extends State<RootPage> {
       } else {
         widget.isLogin = true;
         context.read<AuthProvider>().email = user.email!;
+        context.read<AuthProvider>().displayName = user.displayName!;
       }
     });
+  }
+
+  @override
+  void dispose() {
+    super.dispose();
   }
 
   @override

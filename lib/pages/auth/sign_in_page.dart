@@ -45,12 +45,19 @@ class _SignInPagePageState extends State<SignInPage> {
     }
   }
 
-  void onTapSignIn() {
+  Future<void> onTapSignIn() async {
     print("tapped on sign in");
     try {
-      context
+      //loading
+      await Future.delayed(const Duration(seconds: 1));
+      await context
           .read<AuthProvider>()
-          .signIn(context, emailController.text, passwordController.text);
+          .signIn(emailController.text, passwordController.text)
+          .onError((error, stackTrace) {
+        ScaffoldMessenger.of(context)
+            .showSnackBar(SnackBar(content: Text(error.toString())));
+        return null;
+      });
     } on Exception catch (ex) {
       print('-----------EX:$ex.toString()');
     }
@@ -60,7 +67,14 @@ class _SignInPagePageState extends State<SignInPage> {
     print("tapped on  Create Account");
     // PageTransition(child: createAccountPage, type: PageTransitionType.fade);
     // Navigator.pushNamed(createAccountPage);
-    Navigator.pushReplacementNamed(context, RouterName.createAccountPage);
+    Navigator.pushNamed(context, RouterName.createAccountPage);
+  }
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
   }
 
   @override
