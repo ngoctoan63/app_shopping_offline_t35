@@ -44,6 +44,7 @@ const String textIntroductionDone = 'DONE ';
 const String textMainGoodMorning = 'Good Morning!';
 const String textMainGoodAfternoon = 'Good Afternoon!';
 const String textMainGoodEvening = 'Good Evening!';
+const String textSearchBeveragesOrFoods = 'Search beverages or foods';
 //home page
 const String textCategories = 'Categories';
 const String textPopularDeals = 'Popular Deals';

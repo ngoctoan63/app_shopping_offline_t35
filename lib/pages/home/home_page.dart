@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:denshihanbai/pages/home/categories.dart';
 import 'package:denshihanbai/provider/auth_provider.dart';
 import 'package:denshihanbai/utilities/ultilities_function.dart';
 import 'package:draggable_fab/draggable_fab.dart';
@@ -9,6 +10,7 @@ import '../../apps/const/value.dart';
 import '../../apps/routers/router_name.dart';
 import '../../provider/data_provider.dart';
 import '../../widgets/category_item_widget.dart';
+import 'popular_deals.dart';
 
 class HomePage extends StatelessWidget {
   const HomePage({super.key});
@@ -29,100 +31,108 @@ class HomePage extends StatelessWidget {
       default:
         greet = textMainGoodAfternoon;
     }
+    // return Scaffold(
+    //     backgroundColor: Theme.of(context).primaryColorLight,
+    //     body: const Column(
+    //       children: [
+    //         Flexible(child: PopularDeal()),
+    //       ],
+    //     ));
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColorLight,
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
-          Consumer<AuthProvider>(
-              builder: (context, value, child) => Container(
-                    padding:
-                        const EdgeInsets.only(left: 25, right: 25, top: 25),
-                    height: 100,
-                    color: Theme.of(context).primaryColorLight,
-                    child: Row(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Column(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          crossAxisAlignment: CrossAxisAlignment.start,
-                          children: [
-                            Text(
-                              greet,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleSmall
-                                  ?.copyWith(
-                                      fontSize: 14,
-                                      color:
-                                          Theme.of(context).primaryColorDark),
-                            ),
-                            Text(
-                              value.displayName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                      fontSize: 20,
-                                      color:
-                                          Theme.of(context).primaryColorDark),
-                            )
-                          ],
-                        ),
-                        Wrap(
-                          direction: Axis.horizontal,
-                          crossAxisAlignment: WrapCrossAlignment.center,
-                          spacing: -50,
-                          children: [
-                            Container(
-                              padding: const EdgeInsets.only(left: 20),
-                              alignment: Alignment.centerLeft,
-                              decoration: const BoxDecoration(
-                                color: Color(0xFFEDEDED),
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(60.0),
-                                ),
-                              ),
-                              width: 90,
-                              height: 45,
-                              child: Text(
-                                context
-                                    .read<DataProvider>()
-                                    .notifyCount
-                                    .toString(),
-                                style: const TextStyle(
-                                    fontSize: 24,
-                                    fontWeight: FontWeight.w700,
-                                    color: Colors.black),
-                              ),
-                            ),
-                            Container(
-                              decoration: const BoxDecoration(
-                                color: Colors.white,
-                                borderRadius: BorderRadius.all(
-                                  Radius.circular(100.0),
-                                ),
-                              ),
-                              child: InkWell(
-                                onTap: () {
-                                  context.read<AuthProvider>().signOut(context);
-                                },
-                                child: const Icon(
-                                  Icons.circle_notifications,
-                                  color: Color(0xFFC29C1D),
-                                  size: 56,
-                                ),
-                              ),
-                            ),
-                          ],
-                        ),
-                      ],
-                    ),
-                  )),
-          Expanded(
-            // color: Colors.black,
+          Container(
+            color: Theme.of(context).primaryColorLight,
             child: Column(
               children: [
+                Container(
+                  padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
+                  height: 100,
+                  color: Theme.of(context).primaryColorLight,
+                  child: Consumer<AuthProvider>(
+                      builder: (context, value, child) => Row(
+                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                            children: [
+                              Column(
+                                mainAxisAlignment: MainAxisAlignment.center,
+                                crossAxisAlignment: CrossAxisAlignment.start,
+                                children: [
+                                  Text(
+                                    greet,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleSmall
+                                        ?.copyWith(
+                                            fontSize: 14,
+                                            color: Theme.of(context)
+                                                .primaryColorDark),
+                                  ),
+                                  Text(
+                                    value.displayName,
+                                    style: Theme.of(context)
+                                        .textTheme
+                                        .titleMedium
+                                        ?.copyWith(
+                                            fontSize: 20,
+                                            color: Theme.of(context)
+                                                .primaryColorDark),
+                                  )
+                                ],
+                              ),
+                              Wrap(
+                                direction: Axis.horizontal,
+                                crossAxisAlignment: WrapCrossAlignment.center,
+                                spacing: -50,
+                                children: [
+                                  Container(
+                                    padding: const EdgeInsets.only(left: 20),
+                                    alignment: Alignment.centerLeft,
+                                    decoration: const BoxDecoration(
+                                      color: Color(0xFFEDEDED),
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(60.0),
+                                      ),
+                                    ),
+                                    width: 90,
+                                    height: 45,
+                                    child: Text(
+                                      context
+                                          .read<DataProvider>()
+                                          .notifyCount
+                                          .toString(),
+                                      style: const TextStyle(
+                                          fontSize: 24,
+                                          fontWeight: FontWeight.w700,
+                                          color: Colors.black),
+                                    ),
+                                  ),
+                                  Container(
+                                    decoration: const BoxDecoration(
+                                      color: Colors.white,
+                                      borderRadius: BorderRadius.all(
+                                        Radius.circular(100.0),
+                                      ),
+                                    ),
+                                    child: InkWell(
+                                      onTap: () {
+                                        context
+                                            .read<AuthProvider>()
+                                            .signOut(context);
+                                      },
+                                      child: const Icon(
+                                        Icons.circle_notifications,
+                                        color: Color(0xFFC29C1D),
+                                        size: 56,
+                                      ),
+                                    ),
+                                  ),
+                                ],
+                              ),
+                            ],
+                          )),
+                ),
                 InkWell(
                   // onTap: onTap,
                   child: Padding(
@@ -151,7 +161,7 @@ class HomePage extends StatelessWidget {
                               width: 10,
                             ),
                             Text(
-                              "Search beverages or foods",
+                              textSearchBeveragesOrFoods,
                               style: TextStyle(
                                 fontWeight: FontWeight.w600,
                                 fontSize: 18,
@@ -168,8 +178,17 @@ class HomePage extends StatelessWidget {
                 const SizedBox(
                   height: 10,
                 ),
+              ],
+            ),
+          ),
+          Expanded(
+            // color: Theme.of(context).primaryColorLight,
+            // color: Colors.black,
+            child: Column(
+              children: [
                 SizedBox(
                   width: double.infinity,
+                  height: 168,
                   child: CarouselSlider(
                     items: [
                       Container(
@@ -219,134 +238,8 @@ class HomePage extends StatelessWidget {
                     ),
                   ),
                 ),
-                Container(
-                  height: 150,
-                  width: double.infinity,
-                  color: Theme.of(context).primaryColorLight,
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Padding(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 28, vertical: 10),
-                          child: Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Text(
-                                textCategories,
-                                style: TextStyle(
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w700,
-                                    color: Theme.of(context).primaryColorDark),
-                              ),
-                              TextButton(
-                                onPressed: () {
-                                  Navigator.pushNamed(
-                                      context, RouterName.productCategories);
-                                },
-                                style: TextButton.styleFrom(
-                                    padding: EdgeInsets.zero,
-                                    minimumSize: const Size(30, 30),
-                                    tapTargetSize:
-                                        MaterialTapTargetSize.shrinkWrap,
-                                    alignment: Alignment.centerRight),
-                                child: const Icon(
-                                  Icons.chevron_right,
-                                  color: Color(0xff7D8FAB),
-                                  size: 30,
-                                ),
-                              ),
-                            ],
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Consumer<DataProvider>(
-                                builder: (_, dataProvider, __) => Expanded(
-                                    child: ListView.separated(
-                                  scrollDirection: Axis.horizontal,
-                                  itemCount: dataProvider.categoriesList.length,
-                                  separatorBuilder:
-                                      (BuildContext context, int index) =>
-                                          const SizedBox(
-                                    width: 10,
-                                  ),
-                                  itemBuilder:
-                                      (BuildContext context, int index) {
-                                    return Container(
-                                      height: width / 4,
-                                      width: width / 4,
-                                      decoration: BoxDecoration(
-                                        color: colorCategories[index],
-                                        borderRadius:
-                                            BorderRadius.circular(10.0),
-                                      ),
-                                      child: categoryItemWidget(
-                                        categoryID: 'caterogy$index',
-                                        title: dataProvider
-                                            .categoriesList[index]
-                                            .capitalize(),
-                                        assetImagePath:
-                                            'assets/images/categories/${dataProvider.categoriesList[index]}.png',
-                                        itemsCount: 45,
-                                      ),
-                                    );
-                                  },
-                                )),
-                              ),
-                            ],
-                          ),
-                        )
-                      ]),
-                ),
-                Expanded(
-                  child: Column(
-                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                      children: [
-                        Container(
-                          padding: const EdgeInsets.symmetric(
-                              horizontal: 28, vertical: 10),
-                          alignment: Alignment.centerLeft,
-                          child: Text(
-                            textPopularDeals,
-                            style: TextStyle(
-                                fontSize: 18,
-                                fontWeight: FontWeight.w700,
-                                color: Theme.of(context).primaryColorDark),
-                          ),
-                        ),
-                        Expanded(
-                          child: Column(
-                            children: [
-                              Consumer<DataProvider>(
-                                builder: (_, dataProvider, __) => Expanded(
-                                  child: GridView.builder(
-                                    physics:
-                                        const NeverScrollableScrollPhysics(),
-                                    shrinkWrap: true,
-                                    gridDelegate:
-                                        const SliverGridDelegateWithFixedCrossAxisCount(
-                                      crossAxisCount: 2,
-                                      mainAxisSpacing: 20,
-                                      crossAxisSpacing: 20,
-                                      childAspectRatio: 1.5 / 2.6,
-                                    ),
-                                    itemCount: 8,
-                                    itemBuilder:
-                                        (BuildContext context, int index) {
-                                      return Container(
-                                        color: Colors.amber,
-                                      );
-                                    },
-                                  ),
-                                ),
-                              ),
-                            ],
-                          ),
-                        )
-                      ]),
-                ),
+                const Categories(),
+                const Flexible(child: PopularDeal()),
               ],
             ),
           ),
