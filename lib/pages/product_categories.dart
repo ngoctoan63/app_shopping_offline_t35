@@ -20,7 +20,7 @@ class ProductCategories extends StatelessWidget {
         children: [
           Container(
             padding: const EdgeInsets.only(left: 28, top: 25, right: 25),
-            height: 50,
+            height: 100,
             child: Row(
               // mainAxisAlignment: MainAxisAlignment.spaceBetween,
               children: [

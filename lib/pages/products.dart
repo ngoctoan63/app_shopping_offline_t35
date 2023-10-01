@@ -1,11 +1,18 @@
 import 'dart:async';
 
+import 'package:align_positioned/align_positioned.dart';
+import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-
+import 'package:like_button/like_button.dart';
+import 'package:flutter_svg/flutter_svg.dart';
+import 'package:provider/provider.dart';
 import '../apps/const/value.dart';
+import '../apps/themes/theme.dart';
+import '../provider/data_provider.dart';
+import '../widgets/product_item.dart';
 
-class ProductPage extends StatelessWidget {
+class ProductPage extends StatefulWidget {
   ProductPage({
     super.key,
     required this.categoryID,
@@ -13,10 +20,20 @@ class ProductPage extends StatelessWidget {
   });
   String categoryID;
   String title;
+
+  @override
+  State<ProductPage> createState() => _ProductPageState();
+}
+
+class _ProductPageState extends State<ProductPage> {
   String searchKey = "";
+
   int page = 1;
+
   Timer? timer1;
+
   final TextEditingController _textEditingController = TextEditingController();
+
   void handleOnChange(String value) {
     page = 1;
     searchKey = value;
@@ -29,11 +46,14 @@ class ProductPage extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    double screenWidth = MediaQuery.of(context).size.width;
+    double screenHeight = MediaQuery.of(context).size.height;
+    bool isFavorite = true;
     return Scaffold(
       body: Column(children: [
         Container(
-          padding: const EdgeInsets.only(left: 28, top: 25, right: 25),
-          height: 50,
+          padding: const EdgeInsets.only(left: 28, top: 25, right: 28),
+          height: 100,
           child:
               Row(mainAxisAlignment: MainAxisAlignment.spaceBetween, children: [
             Row(
@@ -57,7 +77,7 @@ class ProductPage extends StatelessWidget {
                   width: 10,
                 ),
                 Text(
-                  title,
+                  widget.title,
                   style: TextStyle(
                       fontSize: 18,
                       fontWeight: FontWeight.w700,
@@ -101,7 +121,7 @@ class ProductPage extends StatelessWidget {
           width: 10,
         ),
         Padding(
-          padding: const EdgeInsets.only(left: 25, top: 20, right: 25),
+          padding: const EdgeInsets.only(left: 25, top: 0, right: 25),
           child: TextField(
             onChanged: (value) {
               handleOnChange(value);
@@ -124,9 +144,42 @@ class ProductPage extends StatelessWidget {
           ),
         ),
         const SizedBox(
-          height: 40,
+          height: 10,
         ),
+        Expanded(
+          child: Column(
+            children: [
+              Consumer<DataProvider>(
+                builder: (_, dataProvider, __) => Expanded(
+                    child: ListView.separated(
+                  scrollDirection: Axis.vertical,
+                  itemCount: dataProvider.categoriesList.length,
+                  separatorBuilder: (BuildContext context, int index) =>
+                      const SizedBox(
+                    height: 20,
+                  ),
+                  itemBuilder: (BuildContext context, int index) {
+                    return const ProductItem();
+                  },
+                )),
+              ),
+            ],
+          ),
+        )
       ]),
+      floatingActionButton: DraggableFab(
+        child: Consumer<DataProvider>(
+          builder: (context, dataProvider, child) => FloatingActionButton(
+            backgroundColor: Theme.of(context).primaryColor,
+            foregroundColor: Colors.white,
+            onPressed: () => {dataProvider.setMode(!dataProvider.isLightMode)},
+            child: const Icon(
+              Icons.change_circle,
+              size: 30,
+            ),
+          ),
+        ),
+      ),
     );
   }
 }

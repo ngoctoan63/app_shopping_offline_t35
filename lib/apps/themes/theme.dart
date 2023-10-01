@@ -60,3 +60,5 @@ const TextStyle title_medium_dark = TextStyle(
   fontSize: 24,
   fontWeight: FontWeight.w700,
 );
+
+const Color colorDiscount = Color(0xFFC29C1D);

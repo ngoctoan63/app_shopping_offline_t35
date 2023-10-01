@@ -3,6 +3,7 @@ import 'package:provider/provider.dart';
 
 import '../../apps/const/value.dart';
 import '../../provider/data_provider.dart';
+import '../../widgets/popular_deal_item.dart';
 
 class PopularDeal extends StatelessWidget {
   const PopularDeal({
@@ -31,20 +32,17 @@ class PopularDeal extends StatelessWidget {
               Consumer<DataProvider>(
                 builder: (_, dataProvider, __) => Expanded(
                   child: GridView.builder(
-                    physics: const NeverScrollableScrollPhysics(),
+                    // physics: const NeverScrollableScrollPhysics(),
                     shrinkWrap: true,
                     gridDelegate:
                         const SliverGridDelegateWithFixedCrossAxisCount(
                       crossAxisCount: 2,
                       mainAxisSpacing: 20,
                       crossAxisSpacing: 20,
-                      childAspectRatio: 1.5 / 2.6,
                     ),
-                    itemCount: 8,
+                    itemCount: 4,
                     itemBuilder: (BuildContext context, int index) {
-                      return Container(
-                        color: Colors.amber,
-                      );
+                      return const PopularDealItem();
                     },
                   ),
                 ),
