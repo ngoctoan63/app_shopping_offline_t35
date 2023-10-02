@@ -22,23 +22,15 @@ class _ProductItemState extends State<ProductItem> {
     bool isLiked = false;
     return Container(
       margin: const EdgeInsets.symmetric(horizontal: 28),
-      decoration: BoxDecoration(
-        border: Border.all(color: Colors.grey.withOpacity(0.4), width: 0),
-        borderRadius: const BorderRadius.only(
-          topRight: Radius.circular(10),
-          bottomRight: Radius.circular(10),
-          bottomLeft: Radius.circular(20),
-        ),
-      ),
+      decoration: const BoxDecoration(),
       child: Row(
         // mainAxisAlignment: MainAxisAlignment.start,
         children: [
           Container(
             width: screenWidth / 4,
-            decoration: BoxDecoration(
+            decoration: const BoxDecoration(
               color: Colors.grey,
-              border: Border.all(color: Colors.grey.withOpacity(0.4), width: 0),
-              borderRadius: const BorderRadius.only(
+              borderRadius: BorderRadius.only(
                 topRight: Radius.circular(20),
                 bottomRight: Radius.circular(20),
                 bottomLeft: Radius.circular(20),
@@ -50,11 +42,32 @@ class _ProductItemState extends State<ProductItem> {
                   mainAxisAlignment: MainAxisAlignment.start,
                   crossAxisAlignment: CrossAxisAlignment.start,
                   size: 30,
-                  likeCount: 0,
                   likeBuilder: (bool like) {
                     return like
-                        ? SvgPicture.asset('assets/icons/favorite.svg')
-                        : SvgPicture.asset('assets/icons/favorite_0.svg');
+                        ? Container(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(12),
+                              ),
+                              color: Colors.white,
+                            ),
+                            child: const Icon(
+                              Icons.favorite,
+                              color: Colors.red,
+                            ),
+                          )
+                        : Container(
+                            decoration: const BoxDecoration(
+                              borderRadius: BorderRadius.only(
+                                bottomRight: Radius.circular(12),
+                              ),
+                              color: Colors.red,
+                            ),
+                            child: const Icon(
+                              Icons.favorite,
+                              color: Colors.white,
+                            ),
+                          );
                   }),
             ),
           ),
@@ -88,10 +101,8 @@ class _ProductItemState extends State<ProductItem> {
                               maxLines: 2,
                               softWrap: true,
                               overflow: TextOverflow.clip,
-                              text: const TextSpan(
-                                // Note: Styles for TextSpans must be explicitly defined.
-                                // Child text spans will inherit styles from parent
-                                style: TextStyle(
+                              text: TextSpan(
+                                style: const TextStyle(
                                   fontSize: 14.0,
                                   color: Color(0xFF7D8FAB),
                                 ),
@@ -100,8 +111,10 @@ class _ProductItemState extends State<ProductItem> {
                                       text: '\$ 5  ',
                                       style: TextStyle(
                                         fontWeight: FontWeight.w600,
+                                        color:
+                                            Theme.of(context).primaryColorDark,
                                       )),
-                                  TextSpan(
+                                  const TextSpan(
                                     text: '\$ 8.0',
                                     style: TextStyle(
                                       fontWeight: FontWeight.w600,

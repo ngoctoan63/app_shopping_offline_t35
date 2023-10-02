@@ -19,7 +19,50 @@ class DataProvider with ChangeNotifier {
     'pizzas',
     'chicken'
   ];
-
+  List<Map<String, dynamic>> locations = [
+    {
+      'id': 1,
+      'title': 'Chicken Village',
+      'price': 10.5,
+      'discount': 5,
+      'likeCount': 256,
+    },
+    {
+      'id': 2,
+      'title': 'Gurame Fish',
+      'price': 12.5,
+      'discount': 10,
+      'likeCount': 75,
+    },
+    {
+      'id': 3,
+      'title': 'Tomatoes',
+      'price': 17.5,
+      'discount': 7,
+      'likeCount': 275,
+    },
+    {
+      'id': 4,
+      'title': 'Fresh Milk',
+      'price': 19.5,
+      'discount': 25,
+      'likeCount': 453,
+    },
+    {
+      'id': 5,
+      'title': 'Fresh Avocados',
+      'price': 12.5,
+      'discount': 20,
+      'likeCount': 375,
+    },
+    {
+      'id': 6,
+      'title': 'Fresh Grapes',
+      'price': 27.5,
+      'discount': 18,
+      'likeCount': 25,
+    }
+  ];
   void changeIstro(int value) {
     isIntroduction = value;
   }

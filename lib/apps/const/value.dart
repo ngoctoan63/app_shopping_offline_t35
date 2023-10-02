@@ -48,6 +48,8 @@ const String textSearchBeveragesOrFoods = 'Search beverages or foods';
 //home page
 const String textCategories = 'Categories';
 const String textPopularDeals = 'Popular Deals';
+const String textAddToCart = 'Add to cart';
+const String textOFF = 'OFF';
 
 const List<Color> colorCategories = [
   Color(0xff28B0CE),

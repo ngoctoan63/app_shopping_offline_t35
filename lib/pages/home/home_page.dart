@@ -239,7 +239,7 @@ class HomePage extends StatelessWidget {
                   ),
                 ),
                 const Categories(),
-                const Flexible(child: PopularDeal()),
+                const PopularDeal(),
               ],
             ),
           ),
