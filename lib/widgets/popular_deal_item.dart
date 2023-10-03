@@ -12,13 +12,15 @@ import 'small_button.dart';
 class PopularDealItem extends StatefulWidget {
   PopularDealItem({
     super.key,
-    required this.Title,
+    required this.title,
     required this.price,
+    this.imgPath = '',
     this.likeCount = 0,
     this.disCount = 0,
   });
   int disCount;
-  String Title;
+  String title;
+  String imgPath;
   double price;
   int likeCount;
   void handleTapLike(isLiked) {}
@@ -30,6 +32,7 @@ class _PopularDealItemState extends State<PopularDealItem> {
   int addCount = 0;
   late int disCount;
   late String price;
+  late String imgPath;
   void handleAddToCart() {
     setState(() {
       addCount = 1;
@@ -56,6 +59,7 @@ class _PopularDealItemState extends State<PopularDealItem> {
   void initState() {
     disCount = widget.disCount;
     price = '\$${widget.price}';
+    imgPath = widget.imgPath;
     super.initState();
   }
 
@@ -65,146 +69,152 @@ class _PopularDealItemState extends State<PopularDealItem> {
     double screenHeight = MediaQuery.of(context).size.height;
     bool isLiked = false;
 
-    return Container(
-      child: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: [
-          AspectRatio(
-            aspectRatio: 1,
-            child: Container(
-              decoration: const BoxDecoration(
-                color: Colors.grey,
-                borderRadius: BorderRadius.all(
-                  Radius.circular(12),
-                ),
+    return Column(
+      mainAxisAlignment: MainAxisAlignment.start,
+      crossAxisAlignment: CrossAxisAlignment.start,
+      children: [
+        AspectRatio(
+          aspectRatio: 1,
+          child: Container(
+            decoration: BoxDecoration(
+              color: Colors.grey,
+              borderRadius: const BorderRadius.all(
+                Radius.circular(12),
               ),
-              child: Stack(
-                children: [
-                  LikeButton(
-                      mainAxisAlignment: MainAxisAlignment.start,
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      size: 40,
-                      // likeCount: 0,
-                      likeBuilder: (bool like) {
-                        return like
-                            ? const Icon(
-                                Icons.favorite,
-                                color: Colors.red,
-                              )
-                            : const Icon(
-                                Icons.favorite,
-                                color: Colors.white,
-                              );
-                      }),
-                  Visibility(
-                    visible: (disCount != 0),
-                    child: Positioned(
-                      top: 10,
-                      right: -40,
-                      child: Transform.rotate(
-                        angle: pi / 4,
-                        child: Container(
-                          padding: const EdgeInsets.symmetric(vertical: 5),
-                          alignment: Alignment.center,
-                          width: screenWidth / 3,
-                          color: Colors.red,
-                          child: Text(
-                            '$disCount% $textOFF',
-                            style: const TextStyle(
-                              fontSize: 12,
-                              fontWeight: FontWeight.w700,
-                              color: Colors.white,
-                            ),
+              image: DecorationImage(
+                image: AssetImage('assets/images/popular_deals/$imgPath'),
+                fit: BoxFit.cover,
+              ),
+            ),
+            child: Stack(
+              children: [
+                LikeButton(
+                    mainAxisAlignment: MainAxisAlignment.start,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    size: 40,
+                    // likeCount: 0,
+                    likeBuilder: (bool like) {
+                      return like
+                          ? const Icon(Icons.favorite,
+                              color: Colors.red,
+                              shadows: <Shadow>[
+                                  Shadow(color: Colors.white, blurRadius: 15.0)
+                                ])
+                          : const Icon(
+                              Icons.favorite,
+                              color: Color.fromARGB(255, 191, 226, 243),
+                              shadows: <Shadow>[
+                                Shadow(color: Colors.red, blurRadius: 15.0)
+                              ],
+                            );
+                    }),
+                Visibility(
+                  visible: (disCount != 0),
+                  child: Positioned(
+                    top: 10,
+                    right: -40,
+                    child: Transform.rotate(
+                      angle: pi / 4,
+                      child: Container(
+                        padding: const EdgeInsets.symmetric(vertical: 5),
+                        alignment: Alignment.center,
+                        width: screenWidth / 3,
+                        color: Colors.red,
+                        child: Text(
+                          '$disCount% $textOFF',
+                          style: const TextStyle(
+                            fontSize: 12,
+                            fontWeight: FontWeight.w700,
+                            color: Colors.white,
                           ),
                         ),
                       ),
                     ),
                   ),
-                ],
-              ),
-            ),
-          ),
-          Center(
-            child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 5),
-              child: Text(
-                widget.Title,
-                style: TextStyle(
-                    color: Theme.of(context).primaryColorDark,
-                    fontWeight: FontWeight.w600),
-              ),
-            ),
-          ),
-          Padding(
-            padding: const EdgeInsets.only(top: 5),
-            child: Row(
-              mainAxisAlignment: MainAxisAlignment.spaceBetween,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                Text(
-                  price,
-                  style: const TextStyle(color: Color(0xffC29C1D)),
-                ),
-                Wrap(
-                  children: [
-                    Text(
-                      widget.likeCount.toString(),
-                      style: TextStyle(
-                        color: Theme.of(context).primaryColorDark,
-                      ),
-                    ),
-                    const Icon(
-                      Icons.star,
-                      color: Color(0xFFFFA902),
-                    )
-                  ],
                 ),
               ],
             ),
           ),
-          (addCount == 0)
-              ? TextButton(
-                  onPressed: () {
-                    handleAddToCart();
-                  },
-                  child: Container(
-                    width: double.infinity,
-                    height: screenWidth / 8,
-                    decoration: BoxDecoration(
-                      color: Theme.of(context).primaryColor.withAlpha(75),
-                      borderRadius: const BorderRadius.all(
-                        Radius.circular(12),
-                      ),
+        ),
+        Center(
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Text(
+              widget.title,
+              style: TextStyle(
+                  color: Theme.of(context).primaryColorDark,
+                  fontWeight: FontWeight.w600),
+            ),
+          ),
+        ),
+        Padding(
+          padding: const EdgeInsets.only(top: 5),
+          child: Row(
+            mainAxisAlignment: MainAxisAlignment.spaceBetween,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              Text(
+                price,
+                style: const TextStyle(color: Color(0xffC29C1D)),
+              ),
+              Wrap(
+                children: [
+                  Text(
+                    widget.likeCount.toString(),
+                    style: TextStyle(
+                      color: Theme.of(context).primaryColorDark,
                     ),
-                    child: Center(
-                        child: Text(
-                      textAddToCart,
-                      style: TextStyle(
-                          fontSize: 14, color: Theme.of(context).primaryColor),
-                    )),
                   ),
-                )
-              : Padding(
-                  padding: const EdgeInsets.only(top: 10),
-                  child: Row(
-                    mainAxisAlignment: MainAxisAlignment.spaceAround,
-                    children: [
-                      SmallButton(Title: '-', onTap: handleSubTrack),
-                      Text(
-                        addCount.toString(),
-                        style: TextStyle(
-                            color: Theme.of(context).primaryColorDark),
-                      ),
-                      SmallButton(
-                        Title: '+',
-                        onTap: handleAdd,
-                      ),
-                    ],
+                  const Icon(
+                    Icons.star,
+                    color: Color(0xFFFFA902),
+                  )
+                ],
+              ),
+            ],
+          ),
+        ),
+        (addCount == 0)
+            ? TextButton(
+                onPressed: () {
+                  handleAddToCart();
+                },
+                child: Container(
+                  width: double.infinity,
+                  height: screenWidth / 8,
+                  decoration: BoxDecoration(
+                    color: Theme.of(context).primaryColor.withAlpha(75),
+                    borderRadius: const BorderRadius.all(
+                      Radius.circular(12),
+                    ),
                   ),
-                )
-        ],
-      ),
+                  child: Center(
+                      child: Text(
+                    textAddToCart,
+                    style: TextStyle(
+                        fontSize: 14, color: Theme.of(context).primaryColor),
+                  )),
+                ),
+              )
+            : Padding(
+                padding: const EdgeInsets.only(top: 10),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceAround,
+                  children: [
+                    SmallButton(Title: '-', onTap: handleSubTrack),
+                    Text(
+                      addCount.toString(),
+                      style:
+                          TextStyle(color: Theme.of(context).primaryColorDark),
+                    ),
+                    SmallButton(
+                      Title: '+',
+                      onTap: handleAdd,
+                    ),
+                  ],
+                ),
+              )
+      ],
     );
   }
 }

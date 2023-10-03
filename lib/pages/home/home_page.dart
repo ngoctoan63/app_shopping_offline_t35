@@ -1,4 +1,7 @@
+import 'dart:math';
+
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:denshihanbai/pages/home/bottom_navigate.dart';
 import 'package:denshihanbai/pages/home/categories.dart';
 import 'package:denshihanbai/provider/auth_provider.dart';
 import 'package:denshihanbai/utilities/ultilities_function.dart';
@@ -245,6 +248,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
+      bottomNavigationBar: BottomNavigate(),
       floatingActionButton: DraggableFab(
         child: Consumer<DataProvider>(
           builder: (context, dataProvider, child) => FloatingActionButton(

@@ -44,13 +44,17 @@ class PopularDeal extends StatelessWidget {
                             crossAxisSpacing: 20,
                             childAspectRatio: 0.55,
                           ),
-                          itemCount: 4,
+                          itemCount: dataProvider.popularDeals.length,
                           itemBuilder: (BuildContext context, int index) {
                             return PopularDealItem(
-                              Title: 'Chicken Village',
-                              price: 10.5,
-                              likeCount: 230,
-                              disCount: 20,
+                              title: dataProvider.popularDeals[index]["title"],
+                              imgPath: dataProvider.popularDeals[index]
+                                  ["image_path"],
+                              price: dataProvider.popularDeals[index]["price"],
+                              likeCount: dataProvider.popularDeals[index]
+                                  ["likeCount"],
+                              disCount: dataProvider.popularDeals[index]
+                                  ["discount"],
                             );
                           },
                         ),
