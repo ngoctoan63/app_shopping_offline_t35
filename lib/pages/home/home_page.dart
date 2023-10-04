@@ -13,15 +13,16 @@ import '../../apps/const/value.dart';
 import '../../apps/routers/router_name.dart';
 import '../../provider/data_provider.dart';
 import '../../widgets/category_item_widget.dart';
+import 'drawer_page.dart';
 import 'popular_deals.dart';
 
 class HomePage extends StatelessWidget {
-  const HomePage({super.key});
+  HomePage({super.key});
 
+  final GlobalKey<ScaffoldState> scaffoldKey = GlobalKey<ScaffoldState>();
   @override
   Widget build(BuildContext context) {
-    double width = MediaQuery.of(context).size.width;
-    double height = MediaQuery.of(context).size.height;
+    double screenWidth = MediaQuery.of(context).size.width;
     int currentHour = DateTime.now().hour;
     String greet;
     switch (currentHour) {
@@ -34,15 +35,15 @@ class HomePage extends StatelessWidget {
       default:
         greet = textMainGoodAfternoon;
     }
-    // return Scaffold(
-    //     backgroundColor: Theme.of(context).primaryColorLight,
-    //     body: const Column(
-    //       children: [
-    //         Flexible(child: PopularDeal()),
-    //       ],
-    //     ));
     return Scaffold(
+      key: scaffoldKey,
       backgroundColor: Theme.of(context).primaryColorLight,
+      drawer: SizedBox(
+        width: screenWidth,
+        child: const Drawer(
+          child: LeftDrawer(),
+        ),
+      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -248,7 +249,7 @@ class HomePage extends StatelessWidget {
           ),
         ],
       ),
-      bottomNavigationBar: BottomNavigate(),
+      bottomNavigationBar: const BottomNavigate(),
       floatingActionButton: DraggableFab(
         child: Consumer<DataProvider>(
           builder: (context, dataProvider, child) => FloatingActionButton(

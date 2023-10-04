@@ -16,6 +16,10 @@ class _BottomNavigateState extends State<BottomNavigate> {
     setState(() {
       selectedIndex = index;
     });
+    if (index == 4) {
+      Scaffold.of(context).openDrawer();
+      selectedIndex = 0;
+    }
   }
 
   @override
@@ -45,7 +49,7 @@ class _BottomNavigateState extends State<BottomNavigate> {
       ],
       iconSize: 30,
       currentIndex: selectedIndex,
-      selectedItemColor: Colors.amber[800],
+      selectedItemColor: Theme.of(context).primaryColor,
       unselectedItemColor: Colors.grey,
       showSelectedLabels: false,
       showUnselectedLabels: false,

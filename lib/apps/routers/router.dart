@@ -19,7 +19,7 @@ class RouterCustom {
       case RouterName.introductionPage:
         return page(const IntroductionPage());
       case RouterName.homePage:
-        return page(const HomePage());
+        return page(HomePage());
       case RouterName.signInPage:
         return page(const SignInPage());
       case RouterName.createAccountPage:

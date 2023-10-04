@@ -65,3 +65,18 @@ const List<Color> colorCategories = [
 // thông báo
 const String textInvalidLoginCredentials = 'Sign in formation is incorrect!';
 const String textLoginFailed = 'Login failed!';
+
+//profile
+const String textVoucherDiscount = 'Vouchers & Discounts';
+const String textCoffeyPoint = 'Coffey Points';
+const String textCoffeyRewards = 'Coffey Rewards';
+const String textAccount = 'Account';
+const String textFavoriteCoffee = 'Favorite Coffee';
+const String textGeneral = 'General';
+const String textSavedAddress = 'Saved Address';
+const String textPaymentMethods = 'Payment Methods';
+const String textPersonalInfo = 'Personal Info';
+const String textNotification = 'Notification';
+const String textSecurity = 'Security';
+const String textLanguage = 'Language';
+const String textDarkMode = 'Dark Mode';

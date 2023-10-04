@@ -64,7 +64,7 @@ class _RootPageState extends State<RootPage> {
             if (snapshot.data == null) {
               return const SignInPage();
             }
-            return const HomePage();
+            return HomePage();
           } else {
             return const Scaffold(
               body: Center(
