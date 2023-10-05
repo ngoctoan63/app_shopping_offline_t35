@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
-import 'package:stroke_text/stroke_text.dart';
 
 import '../../apps/const/value.dart';
 import '../../provider/data_provider.dart';

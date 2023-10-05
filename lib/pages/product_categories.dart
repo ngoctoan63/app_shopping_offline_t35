@@ -1,9 +1,8 @@
-import 'package:denshihanbai/utilities/ultilities_function.dart';
+import 'package:denshihanbai/utilities/utilities_function.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../apps/const/value.dart';
-import '../apps/routers/router_name.dart';
 import '../provider/data_provider.dart';
 import '../widgets/category_item_widget.dart';
 

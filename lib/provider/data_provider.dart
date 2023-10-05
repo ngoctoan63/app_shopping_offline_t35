@@ -1,5 +1,4 @@
 import 'package:denshihanbai/apps/const/value.dart';
-import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
@@ -24,7 +23,7 @@ class DataProvider with ChangeNotifier {
       'id': 1,
       'title': 'Chicken Village',
       'price': 10.5,
-      'discount': 5,
+      'discount': 5.0,
       'likeCount': 256,
       'image_path': 'image01.jpg'
     },
@@ -32,7 +31,7 @@ class DataProvider with ChangeNotifier {
       'id': 2,
       'title': 'Gourami Fish',
       'price': 12.5,
-      'discount': 0,
+      'discount': 0.0,
       'likeCount': 75,
       'image_path': 'image02.jpg'
     },
@@ -40,7 +39,7 @@ class DataProvider with ChangeNotifier {
       'id': 3,
       'title': 'Tomatoes',
       'price': 17.5,
-      'discount': 7,
+      'discount': 7.0,
       'likeCount': 275,
       'image_path': 'image03.jpg'
     },
@@ -48,7 +47,7 @@ class DataProvider with ChangeNotifier {
       'id': 4,
       'title': 'Fresh Milk',
       'price': 19.5,
-      'discount': 25,
+      'discount': 25.0,
       'likeCount': 453,
       'image_path': 'image04.jpg'
     },
@@ -56,7 +55,7 @@ class DataProvider with ChangeNotifier {
       'id': 5,
       'title': 'Fresh Avocados',
       'price': 12.5,
-      'discount': 0,
+      'discount': 0.0,
       'likeCount': 375,
       'image_path': 'image05.jpg'
     },
@@ -64,7 +63,7 @@ class DataProvider with ChangeNotifier {
       'id': 6,
       'title': 'Fresh Grapes',
       'price': 27.5,
-      'discount': 18,
+      'discount': 18.0,
       'likeCount': 25,
       'image_path': 'image06.jpg'
     }

@@ -50,6 +50,7 @@ const String textCategories = 'Categories';
 const String textPopularDeals = 'Popular Deals';
 const String textAddToCart = 'Add to cart';
 const String textOFF = 'OFF';
+const String textAllCategories = 'All Categories';
 
 const List<Color> colorCategories = [
   Color(0xff28B0CE),

@@ -1,18 +1,14 @@
-import 'dart:math';
-
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:denshihanbai/pages/home/bottom_navigate.dart';
 import 'package:denshihanbai/pages/home/categories.dart';
 import 'package:denshihanbai/provider/auth_provider.dart';
-import 'package:denshihanbai/utilities/ultilities_function.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../apps/const/value.dart';
-import '../../apps/routers/router_name.dart';
 import '../../provider/data_provider.dart';
-import '../../widgets/category_item_widget.dart';
+import '../products.dart';
 import 'drawer_page.dart';
 import 'popular_deals.dart';
 
@@ -138,7 +134,13 @@ class HomePage extends StatelessWidget {
                           )),
                 ),
                 InkWell(
-                  // onTap: onTap,
+                  onTap: () {
+                    Navigator.of(context).push(MaterialPageRoute(
+                        builder: (_) => ProductPage(
+                              categoryID: '0',
+                              title: textAllCategories,
+                            )));
+                  },
                   child: Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 28),
                     child: Container(
@@ -186,14 +188,10 @@ class HomePage extends StatelessWidget {
             ),
           ),
           Expanded(
-            // color: Theme.of(context).primaryColorLight,
-            // color: Colors.black,
-            child: Column(
-              children: [
-                SizedBox(
-                  width: double.infinity,
-                  height: 168,
-                  child: CarouselSlider(
+            child: SingleChildScrollView(
+              child: Column(
+                children: [
+                  CarouselSlider(
                     items: [
                       Container(
                         margin: const EdgeInsets.all(0.0),
@@ -241,10 +239,10 @@ class HomePage extends StatelessWidget {
                       viewportFraction: 0.8,
                     ),
                   ),
-                ),
-                const Categories(),
-                const PopularDeal(),
-              ],
+                  const Categories(),
+                  const PopularDeal(),
+                ],
+              ),
             ),
           ),
         ],

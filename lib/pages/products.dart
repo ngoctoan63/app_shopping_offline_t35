@@ -1,14 +1,11 @@
 import 'dart:async';
 
-import 'package:align_positioned/align_positioned.dart';
 import 'package:draggable_fab/draggable_fab.dart';
-import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
-import 'package:like_button/like_button.dart';
-import 'package:flutter_svg/flutter_svg.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
+
 import '../apps/const/value.dart';
-import '../apps/themes/theme.dart';
 import '../provider/data_provider.dart';
 import '../widgets/product_item.dart';
 

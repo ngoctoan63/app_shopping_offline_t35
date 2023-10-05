@@ -1,12 +1,11 @@
-import 'dart:ffi';
 import 'dart:math';
 
 import 'package:denshihanbai/apps/const/value.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter_svg/flutter_svg.dart';
 import 'package:like_button/like_button.dart';
 
-import '../apps/themes/theme.dart';
+import '../pages/product_details.dart';
+import '../utilities/utilities_function.dart';
 import 'small_button.dart';
 
 class PopularDealItem extends StatefulWidget {
@@ -18,7 +17,7 @@ class PopularDealItem extends StatefulWidget {
     this.likeCount = 0,
     this.disCount = 0,
   });
-  int disCount;
+  double disCount;
   String title;
   String imgPath;
   double price;
@@ -30,9 +29,10 @@ class PopularDealItem extends StatefulWidget {
 
 class _PopularDealItemState extends State<PopularDealItem> {
   int addCount = 0;
-  late int disCount;
-  late String price;
+  late double disCount;
+  late double price;
   late String imgPath;
+  late String stringPercent;
   void handleAddToCart() {
     setState(() {
       addCount = 1;
@@ -58,8 +58,9 @@ class _PopularDealItemState extends State<PopularDealItem> {
   @override
   void initState() {
     disCount = widget.disCount;
-    price = '\$${widget.price}';
+    price = widget.price;
     imgPath = widget.imgPath;
+    stringPercent = doubleFormat(disCount);
     super.initState();
   }
 
@@ -121,7 +122,7 @@ class _PopularDealItemState extends State<PopularDealItem> {
                         width: screenWidth / 3,
                         color: Colors.red,
                         child: Text(
-                          '$disCount% $textOFF',
+                          '$stringPercent% $textOFF',
                           style: const TextStyle(
                             fontSize: 12,
                             fontWeight: FontWeight.w700,
@@ -136,40 +137,55 @@ class _PopularDealItemState extends State<PopularDealItem> {
             ),
           ),
         ),
-        Center(
-          child: Padding(
-            padding: const EdgeInsets.symmetric(vertical: 5),
-            child: Text(
-              widget.title,
-              style: TextStyle(
-                  color: Theme.of(context).primaryColorDark,
-                  fontWeight: FontWeight.w600),
-            ),
-          ),
-        ),
-        Padding(
-          padding: const EdgeInsets.only(top: 5),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-            crossAxisAlignment: CrossAxisAlignment.center,
+        InkWell(
+          onTap: () {
+            Navigator.of(context).push(MaterialPageRoute(
+                builder: (_) => ProductDetails(
+                      category: 'FRUIT',
+                      title: widget.title,
+                      price: price,
+                      discount: disCount,
+                    )));
+          },
+          child: Column(
             children: [
-              Text(
-                price,
-                style: const TextStyle(color: Color(0xffC29C1D)),
-              ),
-              Wrap(
-                children: [
-                  Text(
-                    widget.likeCount.toString(),
+              Center(
+                child: Padding(
+                  padding: const EdgeInsets.symmetric(vertical: 5),
+                  child: Text(
+                    widget.title,
                     style: TextStyle(
-                      color: Theme.of(context).primaryColorDark,
-                    ),
+                        color: Theme.of(context).primaryColorDark,
+                        fontWeight: FontWeight.w600),
                   ),
-                  const Icon(
-                    Icons.star,
-                    color: Color(0xFFFFA902),
-                  )
-                ],
+                ),
+              ),
+              Padding(
+                padding: const EdgeInsets.only(top: 5),
+                child: Row(
+                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                  crossAxisAlignment: CrossAxisAlignment.center,
+                  children: [
+                    Text(
+                      '\$$price',
+                      style: const TextStyle(color: Color(0xffC29C1D)),
+                    ),
+                    Wrap(
+                      children: [
+                        Text(
+                          widget.likeCount.toString(),
+                          style: TextStyle(
+                            color: Theme.of(context).primaryColorDark,
+                          ),
+                        ),
+                        const Icon(
+                          Icons.star,
+                          color: Color(0xFFFFA902),
+                        )
+                      ],
+                    ),
+                  ],
+                ),
               ),
             ],
           ),

@@ -6,4 +6,5 @@ class RouterName {
   static const String createAccountPage = '/CreateAccount';
   static const String productCategories = '/ProductCategories';
   static const String productPage = '/ProductPage';
+  static const String productDetails = '/ProductDetails';
 }

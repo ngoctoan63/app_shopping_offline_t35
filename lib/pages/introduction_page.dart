@@ -1,4 +1,3 @@
-import 'package:denshihanbai/provider/data_provider.dart';
 import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:introduction_screen/introduction_screen.dart';
