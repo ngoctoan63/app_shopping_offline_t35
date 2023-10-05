@@ -3,11 +3,17 @@ import 'package:provider/provider.dart';
 
 import '../../apps/const/value.dart';
 import '../../provider/data_provider.dart';
+import '../../provider/info_provider.dart';
 import 'list_title_item.dart';
 
-class LeftDrawer extends StatelessWidget {
+class LeftDrawer extends StatefulWidget {
   const LeftDrawer({super.key});
 
+  @override
+  State<LeftDrawer> createState() => _LeftDrawerState();
+}
+
+class _LeftDrawerState extends State<LeftDrawer> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -25,6 +31,11 @@ class LeftDrawer extends StatelessWidget {
               width: double.infinity,
               height: screenHeight / 5,
               color: Theme.of(context).primaryColor,
+              child: TextButton(
+                  onPressed: () async {
+                    context.read<InfoProvider>().getImage();
+                  },
+                  child: const Text('Browse')),
             ),
             ListTile(
               title: ListTitleItem(

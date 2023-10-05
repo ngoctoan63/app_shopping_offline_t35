@@ -1,14 +1,12 @@
-import 'package:denshihanbai/firebase_options.dart';
 import 'package:firebase_auth/firebase_auth.dart';
-import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../apps/const/value.dart';
-import '../apps/routers/router_name.dart';
 
 class AuthProvider with ChangeNotifier {
   String displayName = "";
+  String userId = "";
   String email = "xxx@yyy.com";
   User? user;
   bool keepSignIn = false;
@@ -21,7 +19,7 @@ class AuthProvider with ChangeNotifier {
         password: password,
       );
       user = FirebaseAuth.instance.currentUser;
-
+      userId = user!.uid;
       await user?.updateDisplayName(displayName);
 
       await FirebaseAuth.instance.signOut();

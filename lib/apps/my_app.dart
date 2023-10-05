@@ -1,14 +1,12 @@
-import 'package:denshihanbai/pages/product_categories.dart';
-import 'package:denshihanbai/provider/data_provider.dart';
-import 'package:firebase_auth/firebase_auth.dart';
-import 'package:flutter/material.dart';
 import 'package:denshihanbai/apps/routers/router.dart';
 import 'package:denshihanbai/apps/themes/theme.dart';
+import 'package:denshihanbai/provider/data_provider.dart';
+import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
-import '../pages/introduction_page.dart';
 import '../provider/auth_provider.dart';
+import '../provider/info_provider.dart';
 import 'const/value.dart';
 import 'routers/router_name.dart';
 
@@ -24,6 +22,9 @@ class MyApp extends StatelessWidget {
             create: (_) => DataProvider()..setMode(!isDarkMode)),
         ChangeNotifierProvider(
           create: (_) => AuthProvider(),
+        ),
+        ChangeNotifierProvider(
+          create: (_) => InfoProvider(),
         ),
       ],
       child: const App(),
