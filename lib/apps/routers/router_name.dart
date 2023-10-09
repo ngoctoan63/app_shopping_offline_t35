@@ -7,4 +7,5 @@ class RouterName {
   static const String productCategories = '/ProductCategories';
   static const String productPage = '/ProductPage';
   static const String productDetails = '/ProductDetails';
+  static const String editProfile = '/EditProfile';
 }

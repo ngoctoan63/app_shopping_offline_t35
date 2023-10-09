@@ -81,3 +81,5 @@ const String textNotification = 'Notification';
 const String textSecurity = 'Security';
 const String textLanguage = 'Language';
 const String textDarkMode = 'Dark Mode';
+const String textMailNotExits = 'No user found for that email.';
+const String textWrongPass = 'Wrong password!!';

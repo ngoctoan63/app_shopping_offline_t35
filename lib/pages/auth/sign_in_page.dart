@@ -1,12 +1,13 @@
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
+import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../apps/const/value.dart';
 import '../../apps/routers/router_name.dart';
-import '../../provider/auth_provider.dart';
 import '../../provider/data_provider.dart';
+import '../../provider/firebase_provider.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/input_field_widget.dart';
 
@@ -46,14 +47,17 @@ class _SignInPagePageState extends State<SignInPage> {
   Future<void> onTapSignIn() async {
     print("tapped on sign in");
     try {
-      //loading
-      await Future.delayed(const Duration(seconds: 1));
-      await context
-          .read<AuthProvider>()
-          .signIn(emailController.text, passwordController.text)
+      FirebaseProvider()
+          .signInEmailPass(emailController.text, passwordController.text)
           .onError((error, stackTrace) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error.toString())));
+        Fluttertoast.showToast(
+            msg: error.toString(), //"Please select avatar image",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            // backgroundColor: Colors.red,
+            textColor: Colors.white,
+            fontSize: 16.0);
         return null;
       });
     } on Exception catch (ex) {

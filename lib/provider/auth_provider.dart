@@ -54,7 +54,6 @@ class AuthProvider with ChangeNotifier {
         default:
           throw textLoginFailed;
       }
-      throw Exception(e);
     } catch (e) {
       print('sign in exception:$e');
     }

@@ -8,6 +8,7 @@ import 'package:page_transition/page_transition.dart';
 
 import '../../pages/auth/create_account_page.dart';
 import '../../pages/auth/sign_in_page.dart';
+import '../../pages/edit_profile.dart';
 import '../../pages/introduction_page.dart';
 import '../../pages/product_details.dart';
 import '../../pages/products.dart';
@@ -27,6 +28,8 @@ class RouterCustom {
         return page(const CreateAccount());
       case RouterName.productCategories:
         return page(const ProductCategories());
+      case RouterName.editProfile:
+        return page(const EditProfile());
       case RouterName.productDetails:
         return page(ProductDetails(
           category: 'General',

@@ -1,9 +1,11 @@
+import 'dart:typed_data';
+
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../apps/const/value.dart';
+import '../../apps/routers/router_name.dart';
 import '../../provider/data_provider.dart';
-import '../../provider/info_provider.dart';
 import 'list_title_item.dart';
 
 class LeftDrawer extends StatefulWidget {
@@ -14,6 +16,7 @@ class LeftDrawer extends StatefulWidget {
 }
 
 class _LeftDrawerState extends State<LeftDrawer> {
+  Uint8List? _image;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -28,58 +31,32 @@ class _LeftDrawerState extends State<LeftDrawer> {
             // Remove padding
             padding: EdgeInsets.zero,
             children: [
-              Consumer<InfoProvider>(
-                builder: (context, value, child) => Container(
-                  width: double.infinity,
-                  height: 130,
-                  color: Theme.of(context).primaryColor,
-                  child: Padding(
-                    padding: const EdgeInsets.only(top: 5),
-                    child: Column(
-                      mainAxisAlignment: MainAxisAlignment.center,
-                      children: [
-                        TextButton(
-                          onPressed: () async {
-                            context.read<InfoProvider>().getImage();
+              Container(
+                width: double.infinity,
+                height: 150,
+                color: Theme.of(context).primaryColor,
+                child: Padding(
+                  padding: const EdgeInsets.only(top: 5),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 40,
+                              backgroundImage: MemoryImage(_image!),
+                            )
+                          : const CircleAvatar(
+                              radius: 40,
+                              backgroundImage: NetworkImage(
+                                  'https://m.media-amazon.com/images/M/MV5BMzdjNjExMTgtZGFmNS00ZWRjLWJmNjAtOTliYzJjYjcxMWFhXkEyXkFqcGdeQXVyMjYwNDA2MDE@._V1_.jpg'),
+                            ),
+                      ElevatedButton(
+                          onPressed: () {
+                            Navigator.pushNamed(
+                                context, RouterName.editProfile);
                           },
-                          child: value.profilePic != ''
-                              ? Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: BoxDecoration(
-                                    color: Colors.orange,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      // image: AssetImage(value.profilePic),
-                                      image: NetworkImage(value.profilePic),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                  // child: Image.network(
-                                  //   value.profilePic, // this image doesn't exist
-                                  //   fit: BoxFit.cover,
-                                  //   errorBuilder: (context, error, stackTrace) {
-                                  //     return Image(
-                                  //         image: AssetImage(value.profilePic));
-                                  //   },
-                                  // ),
-                                )
-                              : Container(
-                                  width: 100,
-                                  height: 100,
-                                  decoration: const BoxDecoration(
-                                    color: Colors.orange,
-                                    shape: BoxShape.circle,
-                                    image: DecorationImage(
-                                      image: AssetImage(
-                                          'assets/images/default_avatar.png'),
-                                      fit: BoxFit.fill,
-                                    ),
-                                  ),
-                                ),
-                        ),
-                      ],
-                    ),
+                          child: const Text('Edit'))
+                    ],
                   ),
                 ),
               ),
