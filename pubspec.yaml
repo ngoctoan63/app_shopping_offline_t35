@@ -53,6 +53,8 @@ dependencies:
   firebase_storage: ^11.2.8
   cloud_firestore: ^4.9.3
   cached_network_image: ^3.3.0
+  progress_state_button: ^1.0.4
+  confirm_dialog: ^1.0.2
 
 dev_dependencies:
   flutter_test:
@@ -78,6 +80,7 @@ flutter:
 
   # To add assets to your application, add an assets section, like this:
   assets:
+    - assets/
     - assets/images/
     - assets/images/categories/
     - assets/icons/

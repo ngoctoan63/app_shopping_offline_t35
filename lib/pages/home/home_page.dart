@@ -1,13 +1,13 @@
 import 'package:carousel_slider/carousel_slider.dart';
 import 'package:denshihanbai/pages/home/bottom_navigate.dart';
 import 'package:denshihanbai/pages/home/categories.dart';
-import 'package:denshihanbai/provider/auth_provider.dart';
 import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../apps/const/value.dart';
 import '../../provider/data_provider.dart';
+import '../../provider/firebase_provider.dart';
 import '../products.dart';
 import 'drawer_page.dart';
 import 'popular_deals.dart';
@@ -48,91 +48,91 @@ class HomePage extends StatelessWidget {
             child: Column(
               children: [
                 Container(
-                  padding: const EdgeInsets.only(left: 25, right: 25, top: 25),
-                  height: 100,
-                  color: Theme.of(context).primaryColorLight,
-                  child: Consumer<AuthProvider>(
-                      builder: (context, value, child) => Row(
-                            mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                            children: [
-                              Column(
-                                mainAxisAlignment: MainAxisAlignment.center,
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                children: [
-                                  Text(
-                                    greet,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleSmall
-                                        ?.copyWith(
-                                            fontSize: 14,
-                                            color: Theme.of(context)
-                                                .primaryColorDark),
-                                  ),
-                                  Text(
-                                    value.displayName,
-                                    style: Theme.of(context)
-                                        .textTheme
-                                        .titleMedium
-                                        ?.copyWith(
-                                            fontSize: 20,
-                                            color: Theme.of(context)
-                                                .primaryColorDark),
-                                  )
-                                ],
+                    padding:
+                        const EdgeInsets.only(left: 25, right: 25, top: 25),
+                    height: 100,
+                    color: Theme.of(context).primaryColorLight,
+                    child: Row(
+                      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+                      children: [
+                        Column(
+                          mainAxisAlignment: MainAxisAlignment.center,
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          children: [
+                            Text(
+                              greet,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleSmall
+                                  ?.copyWith(
+                                      fontSize: 14,
+                                      color:
+                                          Theme.of(context).primaryColorDark),
+                            ),
+                            Text(
+                              displayName,
+                              style: Theme.of(context)
+                                  .textTheme
+                                  .titleMedium
+                                  ?.copyWith(
+                                      fontSize: 20,
+                                      color:
+                                          Theme.of(context).primaryColorDark),
+                            )
+                          ],
+                        ),
+                        Wrap(
+                          direction: Axis.horizontal,
+                          crossAxisAlignment: WrapCrossAlignment.center,
+                          spacing: -50,
+                          children: [
+                            Container(
+                              padding: const EdgeInsets.only(left: 20),
+                              alignment: Alignment.centerLeft,
+                              decoration: const BoxDecoration(
+                                color: Color(0xFFEDEDED),
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(60.0),
+                                ),
                               ),
-                              Wrap(
-                                direction: Axis.horizontal,
-                                crossAxisAlignment: WrapCrossAlignment.center,
-                                spacing: -50,
-                                children: [
-                                  Container(
-                                    padding: const EdgeInsets.only(left: 20),
-                                    alignment: Alignment.centerLeft,
-                                    decoration: const BoxDecoration(
-                                      color: Color(0xFFEDEDED),
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(60.0),
-                                      ),
-                                    ),
-                                    width: 90,
-                                    height: 45,
-                                    child: Text(
-                                      context
-                                          .read<DataProvider>()
-                                          .notifyCount
-                                          .toString(),
-                                      style: const TextStyle(
-                                          fontSize: 24,
-                                          fontWeight: FontWeight.w700,
-                                          color: Colors.black),
-                                    ),
-                                  ),
-                                  Container(
-                                    decoration: const BoxDecoration(
-                                      color: Colors.white,
-                                      borderRadius: BorderRadius.all(
-                                        Radius.circular(100.0),
-                                      ),
-                                    ),
-                                    child: InkWell(
-                                      onTap: () {
-                                        context
-                                            .read<AuthProvider>()
-                                            .signOut(context);
-                                      },
-                                      child: const Icon(
-                                        Icons.circle_notifications,
-                                        color: Color(0xFFC29C1D),
-                                        size: 56,
-                                      ),
-                                    ),
-                                  ),
-                                ],
+                              width: 90,
+                              height: 45,
+                              child: Text(
+                                context
+                                    .read<DataProvider>()
+                                    .notifyCount
+                                    .toString(),
+                                style: const TextStyle(
+                                    fontSize: 24,
+                                    fontWeight: FontWeight.w700,
+                                    color: Colors.black),
                               ),
-                            ],
-                          )),
-                ),
+                            ),
+                            Container(
+                              decoration: const BoxDecoration(
+                                color: Colors.white,
+                                borderRadius: BorderRadius.all(
+                                  Radius.circular(100.0),
+                                ),
+                              ),
+                              child: InkWell(
+                                onTap: () {
+                                  FirebaseProvider().signOut();
+                                  // context
+                                  //     .read<FirebaseStorage>()
+                                  //     .signOut(context);
+                                },
+                                child: const Icon(
+                                  Icons.circle_notifications,
+                                  color: Color(0xFFC29C1D),
+                                  size: 56,
+                                ),
+                              ),
+                            ),
+                          ],
+                        ),
+                      ],
+                    )),
                 InkWell(
                   onTap: () {
                     Navigator.of(context).push(MaterialPageRoute(

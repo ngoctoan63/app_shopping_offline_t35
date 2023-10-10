@@ -5,6 +5,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 
 import '../apps/const/value.dart';
 
@@ -13,6 +14,7 @@ final FirebaseFirestore _firestore = FirebaseFirestore.instance;
 String displayName = "";
 String userId = "";
 String email = "xxx@yyy.com";
+String imgURL = '';
 User? user;
 
 class FirebaseProvider with ChangeNotifier {
@@ -30,12 +32,15 @@ class FirebaseProvider with ChangeNotifier {
   Future<String> saveProfile({
     required String firstName,
     required String lastName,
-    required Uint8List image,
+    Uint8List? image,
   }) async {
     String resp = 'Errors!';
     try {
-      String imgUrl =
-          await upLoadImageToStorage('/profile_image/$userId', image);
+      if (image != null) {
+        imgURL = await upLoadImageToStorage('/profile_image/$userId', image);
+        await user?.updatePhotoURL(imgURL);
+      }
+      await user?.updateDisplayName(displayName);
       // await _firestore.collection('userABC').add({
       //   'lastName': lastName,
       //   'firstName': firstName,
@@ -48,6 +53,34 @@ class FirebaseProvider with ChangeNotifier {
     return resp;
   }
 
+  bool keepSignIn = false;
+  Future<User?> createUser(String emailAddress, String password,
+      [String displayName = '']) async {
+    try {
+      UserCredential credential =
+          await FirebaseAuth.instance.createUserWithEmailAndPassword(
+        email: emailAddress,
+        password: password,
+      );
+      user = FirebaseAuth.instance.currentUser;
+      userId = user!.uid;
+      await user?.updateDisplayName(displayName);
+
+      await FirebaseAuth.instance.signOut();
+      return user;
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'weak-password') {
+        throw textPasswordTooWeak;
+      } else if (e.code == 'email-already-in-use') {
+        throw textAccountExists;
+      }
+      throw textCreateError;
+    } catch (e) {
+      print('----ccc--createUser exception:$e');
+    }
+    return null;
+  }
+
   Future<void> signInEmailPass(String email, String password) async {
     try {
       final credential = await FirebaseAuth.instance
@@ -57,8 +90,16 @@ class FirebaseProvider with ChangeNotifier {
       if (user!.displayName != null) {
         displayName = user!.displayName!;
       }
-      email = user!.email!;
-      emailStreamController.add(email);
+      if (user?.email! != null) {
+        email = user!.email!;
+      }
+
+      if (user?.photoURL != null) {
+        imgURL = user!.photoURL!;
+      }
+      if (user?.uid != null) {
+        userId = user!.uid;
+      }
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'INVALID_LOGIN_CREDENTIALS':
@@ -72,6 +113,17 @@ class FirebaseProvider with ChangeNotifier {
       }
     } catch (e) {
       print('sign in exception:$e');
+    }
+  }
+
+  void signOut() async {
+    final SharedPreferences prefs = await SharedPreferences.getInstance();
+    await prefs.remove(prefsKeepSignIn);
+    try {
+      await FirebaseAuth.instance.signOut();
+    } on FirebaseAuthException catch (e) {
+      print('Exception on sign out!!!!');
+      print(e.message);
     }
   }
 }

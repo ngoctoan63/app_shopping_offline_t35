@@ -1,10 +1,9 @@
-import 'package:denshihanbai/provider/auth_provider.dart';
-import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
-import 'package:provider/provider.dart';
+import 'package:fluttertoast/fluttertoast.dart';
+import 'package:progress_state_button/progress_button.dart';
 
 import '../../apps/const/value.dart';
-import '../../provider/data_provider.dart';
+import '../../provider/firebase_provider.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/input_field_widget.dart';
 
@@ -17,6 +16,8 @@ class CreateAccount extends StatefulWidget {
 
 class _CreateAccountState extends State<CreateAccount> {
   bool _obscureText = true;
+  ButtonState stateOnlyText = ButtonState.idle;
+  bool isSignUpProcessing = false;
   void _toggle() {
     setState(() {
       _obscureText = !_obscureText;
@@ -24,7 +25,7 @@ class _CreateAccountState extends State<CreateAccount> {
   }
 
   //controller
-  TextEditingController userNameController = TextEditingController();
+  TextEditingController displayNameController = TextEditingController();
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
 
@@ -34,22 +35,50 @@ class _CreateAccountState extends State<CreateAccount> {
           acceptTerms = newValue;
         });
       });
-  Future<void> onTapRegister() async {
+  void onTapRegister() async {
     try {
-      //loading
-      await Future.delayed(const Duration(seconds: 1));
-      await context
-          .read<AuthProvider>()
+      setState(() {
+        stateOnlyText = ButtonState.loading;
+        isSignUpProcessing = true;
+      });
+      FirebaseProvider()
           .createUser(emailController.text, passwordController.text,
-              userNameController.text)
+              displayNameController.text)
           .onError((error, stackTrace) {
-        ScaffoldMessenger.of(context)
-            .showSnackBar(SnackBar(content: Text(error.toString())));
+        Fluttertoast.showToast(
+            msg: error.toString(), //"Please select avatar image",
+            toastLength: Toast.LENGTH_SHORT,
+            gravity: ToastGravity.CENTER,
+            timeInSecForIosWeb: 1,
+            textColor: Colors.white,
+            fontSize: 16.0);
         return null;
-      }).then((user) {
+      }).then((user) async {
         if (user != null) {
+          setState(() {
+            stateOnlyText = ButtonState.idle;
+            isSignUpProcessing = false;
+          });
+          await Fluttertoast.showToast(
+              msg: textSuccess, //"Please select avatar image",
+              toastLength: Toast.LENGTH_SHORT,
+              gravity: ToastGravity.CENTER,
+              timeInSecForIosWeb: 1,
+              textColor: Colors.white,
+              fontSize: 16.0);
+
           Navigator.pop(context);
         }
+      });
+      await Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          stateOnlyText = ButtonState.idle;
+        });
+      });
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isSignUpProcessing = false;
+        });
       });
       if (!mounted) return;
     } on Exception catch (ex) {
@@ -63,7 +92,7 @@ class _CreateAccountState extends State<CreateAccount> {
 
   @override
   void dispose() {
-    userNameController.dispose();
+    displayNameController.dispose();
     emailController.dispose();
     passwordController.dispose();
     super.dispose();
@@ -139,7 +168,7 @@ class _CreateAccountState extends State<CreateAccount> {
                       height: 10,
                     ),
                     InputField(
-                      controller: userNameController,
+                      controller: displayNameController,
                       hintText: textUserNameHint,
                       labelText: textUserNameLabel,
                       prefixIcon: const Icon(Icons.person),
@@ -159,11 +188,56 @@ class _CreateAccountState extends State<CreateAccount> {
                     ),
                     AbsorbPointer(
                       absorbing: !acceptTerms,
-                      child: ButtonWidget(
-                        title: textSignInSignUp,
-                        onTap: onTapRegister,
-                        enable: acceptTerms,
-                      ),
+                      child: !acceptTerms
+                          ? ButtonWidget(
+                              title: textSignInSignUp,
+                              onTap: onTapRegister,
+                              enable: acceptTerms,
+                            )
+                          : AbsorbPointer(
+                              absorbing: isSignUpProcessing,
+                              child: ProgressButton(
+                                progressIndicatorAlignment:
+                                    MainAxisAlignment.center,
+                                stateWidgets: const {
+                                  ButtonState.idle: Text(
+                                    textSignInSignUp,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  ButtonState.loading: Text(
+                                    '',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  ButtonState.fail: Text(
+                                    textFail,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  ButtonState.success: Text(
+                                    textSuccess,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                },
+                                stateColors: {
+                                  ButtonState.idle:
+                                      Theme.of(context).primaryColor,
+                                  ButtonState.loading: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.5),
+                                  ButtonState.fail: Colors.red.shade300,
+                                  ButtonState.success: Colors.green.shade400,
+                                },
+                                onPressed: onTapRegister,
+                                state: stateOnlyText,
+                              ),
+                            ),
                     ),
                     const SizedBox(
                       height: 25,
@@ -247,20 +321,6 @@ class _CreateAccountState extends State<CreateAccount> {
                 ),
               )
             ],
-          ),
-        ),
-        floatingActionButton: DraggableFab(
-          child: Consumer<DataProvider>(
-            builder: (context, dataProvider, child) => FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-              onPressed: () =>
-                  {dataProvider.setMode(!dataProvider.isLightMode)},
-              child: const Icon(
-                Icons.change_circle,
-                size: 30,
-              ),
-            ),
           ),
         ),
       ),

@@ -1,5 +1,8 @@
 import 'package:flutter/material.dart';
 
+import '../../apps/const/value.dart';
+import '../../provider/firebase_provider.dart';
+
 class BottomNavigate extends StatefulWidget {
   const BottomNavigate({
     super.key,
@@ -25,25 +28,34 @@ class _BottomNavigateState extends State<BottomNavigate> {
   @override
   Widget build(BuildContext context) {
     return BottomNavigationBar(
-      items: const <BottomNavigationBarItem>[
-        BottomNavigationBarItem(
+      items: <BottomNavigationBarItem>[
+        const BottomNavigationBarItem(
           icon: Icon(Icons.home),
           label: 'Home',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.repeat_on_rounded),
           label: 'Change',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.shopify),
           label: 'Cart',
         ),
-        BottomNavigationBarItem(
+        const BottomNavigationBarItem(
           icon: Icon(Icons.favorite),
           label: 'Favorite',
         ),
         BottomNavigationBarItem(
-          icon: Icon(Icons.person),
+          icon: CircleAvatar(
+            radius: 20,
+            backgroundImage: imgURL == ''
+                ? const NetworkImage(textDefaultAva)
+                : FadeInImage.assetNetwork(
+                    placeholder: 'assets/Spinner-5.gif',
+                    image: imgURL,
+                    fit: BoxFit.cover,
+                  ).image,
+          ),
           label: 'Profile',
         ),
       ],

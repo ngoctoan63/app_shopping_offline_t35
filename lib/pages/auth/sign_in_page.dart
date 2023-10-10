@@ -1,12 +1,10 @@
-import 'package:draggable_fab/draggable_fab.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
-import 'package:provider/provider.dart';
+import 'package:progress_state_button/progress_button.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../../apps/const/value.dart';
 import '../../apps/routers/router_name.dart';
-import '../../provider/data_provider.dart';
 import '../../provider/firebase_provider.dart';
 import '../../widgets/button_widget.dart';
 import '../../widgets/input_field_widget.dart';
@@ -19,6 +17,9 @@ class SignInPage extends StatefulWidget {
 }
 
 class _SignInPagePageState extends State<SignInPage> {
+  ButtonState stateOnlyText = ButtonState.idle;
+
+  bool isSignInProcessing = false;
   bool _obscureText = true;
   void _toggle() {
     setState(() {
@@ -44,21 +45,34 @@ class _SignInPagePageState extends State<SignInPage> {
     }
   }
 
-  Future<void> onTapSignIn() async {
-    print("tapped on sign in");
+  void onTapSignIn() async {
+    setState(() {
+      stateOnlyText = ButtonState.loading;
+      isSignInProcessing = true;
+    });
     try {
       FirebaseProvider()
           .signInEmailPass(emailController.text, passwordController.text)
           .onError((error, stackTrace) {
         Fluttertoast.showToast(
-            msg: error.toString(), //"Please select avatar image",
-            toastLength: Toast.LENGTH_SHORT,
-            gravity: ToastGravity.CENTER,
-            timeInSecForIosWeb: 1,
-            // backgroundColor: Colors.red,
-            textColor: Colors.white,
-            fontSize: 16.0);
-        return null;
+          msg: error.toString(),
+          toastLength: Toast.LENGTH_SHORT,
+          gravity: ToastGravity.CENTER,
+          timeInSecForIosWeb: 1,
+          textColor: Colors.white,
+          // fontSize: 16.0,
+        );
+        // return null;
+      });
+      await Future.delayed(const Duration(seconds: 1), () {
+        setState(() {
+          stateOnlyText = ButtonState.idle;
+        });
+      });
+      await Future.delayed(const Duration(milliseconds: 500), () {
+        setState(() {
+          isSignInProcessing = false;
+        });
       });
     } on Exception catch (ex) {
       print('-----------EX:$ex.toString()');
@@ -161,9 +175,46 @@ class _SignInPagePageState extends State<SignInPage> {
                       prefixIcon: const Icon(Icons.lock),
                       isSecure: true,
                     ),
-                    ButtonWidget(
-                      title: textSignInButton,
-                      onTap: onTapSignIn,
+                    AbsorbPointer(
+                      absorbing: isSignInProcessing,
+                      child: ProgressButton(
+                        progressIndicatorAlignment: MainAxisAlignment.center,
+                        stateWidgets: const {
+                          ButtonState.idle: Text(
+                            textSignInButton,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          ButtonState.loading: Text(
+                            '',
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          ButtonState.fail: Text(
+                            textFail,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          ),
+                          ButtonState.success: Text(
+                            textSuccess,
+                            style: TextStyle(
+                                color: Colors.white,
+                                fontWeight: FontWeight.w500),
+                          )
+                        },
+                        stateColors: {
+                          ButtonState.idle: Theme.of(context).primaryColor,
+                          ButtonState.loading:
+                              Theme.of(context).primaryColor.withOpacity(0.5),
+                          ButtonState.fail: Colors.red.shade300,
+                          ButtonState.success: Colors.green.shade400,
+                        },
+                        onPressed: onTapSignIn,
+                        state: stateOnlyText,
+                      ),
                     ),
                     const SizedBox(
                       height: 15,
@@ -238,20 +289,6 @@ class _SignInPagePageState extends State<SignInPage> {
                 ),
               )
             ],
-          ),
-        ),
-        floatingActionButton: DraggableFab(
-          child: Consumer<DataProvider>(
-            builder: (context, dataProvider, child) => FloatingActionButton(
-              backgroundColor: Theme.of(context).primaryColor,
-              foregroundColor: Colors.white,
-              onPressed: () =>
-                  {dataProvider.setMode(!dataProvider.isLightMode)},
-              child: const Icon(
-                Icons.change_circle,
-                size: 30,
-              ),
-            ),
           ),
         ),
       ),

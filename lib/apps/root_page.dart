@@ -1,14 +1,14 @@
 import 'package:denshihanbai/apps/const/value.dart';
-import 'package:denshihanbai/provider/auth_provider.dart';
+import 'package:denshihanbai/pages/auth/sign_in_page.dart';
+import 'package:denshihanbai/pages/home/home_page.dart';
 import 'package:denshihanbai/provider/data_provider.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:denshihanbai/pages/auth/sign_in_page.dart';
-import 'package:denshihanbai/pages/home/home_page.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../pages/introduction_page.dart';
+import '../provider/firebase_provider.dart';
 
 class RootPage extends StatefulWidget {
   RootPage({
@@ -37,14 +37,25 @@ class _RootPageState extends State<RootPage> {
     super.initState();
     readkeepSignIn();
     context.read<DataProvider>().changeIstro(widget.numberIntro);
-    FirebaseAuth.instance.authStateChanges().listen((User? user) {
-      if (user == null) {
-      } else {
-        widget.isLogin = true;
-        context.read<AuthProvider>().email = user.email!;
-        context.read<AuthProvider>().displayName = user.displayName!;
+    if (FirebaseAuth.instance.currentUser != null) {
+      // signed in
+      widget.isLogin = true;
+      user = FirebaseAuth.instance.currentUser;
+      if (user?.email! != null) {
+        email = user!.email!;
       }
-    });
+      if (user?.displayName! != null) {
+        displayName = user!.displayName!;
+      }
+      if (user?.photoURL != null) {
+        imgURL = user!.photoURL!;
+      }
+      if (user?.uid != null) {
+        userId = user!.uid;
+      }
+    } else {
+      // signed out
+    }
   }
 
   @override
