@@ -6,6 +6,7 @@ import 'package:fluttertoast/fluttertoast.dart';
 import 'package:provider/provider.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
+import '../provider/firebase_provider.dart';
 import 'const/value.dart';
 import 'routers/router_name.dart';
 
@@ -19,9 +20,9 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
             create: (_) => DataProvider()..setMode(!isDarkMode)),
-        // ChangeNotifierProvider(
-        //   create: (_) => AuthProvider(),
-        // ),
+        ChangeNotifierProvider(
+          create: (_) => FirebaseProvider(),
+        ),
       ],
       child: const App(),
     );

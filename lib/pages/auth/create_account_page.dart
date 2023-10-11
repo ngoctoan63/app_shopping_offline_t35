@@ -42,7 +42,7 @@ class _CreateAccountState extends State<CreateAccount> {
         isSignUpProcessing = true;
       });
       FirebaseProvider()
-          .createUser(emailController.text, passwordController.text,
+          .register(emailController.text, passwordController.text,
               displayNameController.text)
           .onError((error, stackTrace) {
         Fluttertoast.showToast(

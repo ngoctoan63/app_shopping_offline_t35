@@ -1,7 +1,6 @@
 import 'package:flutter/material.dart';
 
 import '../../apps/const/value.dart';
-import '../../provider/firebase_provider.dart';
 
 class BottomNavigate extends StatefulWidget {
   const BottomNavigate({
@@ -48,11 +47,13 @@ class _BottomNavigateState extends State<BottomNavigate> {
         BottomNavigationBarItem(
           icon: CircleAvatar(
             radius: 20,
-            backgroundImage: imgURL == ''
+            // backgroundImage: imgURL == ''
+            backgroundImage: '' == ''
                 ? const NetworkImage(textDefaultAva)
                 : FadeInImage.assetNetwork(
                     placeholder: 'assets/Spinner-5.gif',
-                    image: imgURL,
+                    // image: imgURL,
+                    image: '',
                     fit: BoxFit.cover,
                   ).image,
           ),

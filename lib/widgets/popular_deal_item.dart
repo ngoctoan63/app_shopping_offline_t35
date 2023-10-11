@@ -76,82 +76,77 @@ class _PopularDealItemState extends State<PopularDealItem> {
       children: [
         AspectRatio(
           aspectRatio: 1,
-          child: Hero(
-            tag: 1,
-            child: InkWell(
-              onTap: () {
-                Navigator.of(context).push(MaterialPageRoute(
-                    builder: (_) => ProductDetails(
-                          category: 'FRUIT',
-                          title: widget.title,
-                          price: price,
-                          discount: disCount,
-                        )));
-              },
-              child: Container(
-                decoration: BoxDecoration(
-                  color: Colors.grey,
-                  borderRadius: const BorderRadius.all(
-                    Radius.circular(12),
-                  ),
-                  image: DecorationImage(
-                    image: AssetImage('assets/images/popular_deals/$imgPath'),
-                    fit: BoxFit.cover,
-                  ),
+          child: InkWell(
+            onTap: () {
+              Navigator.of(context).push(MaterialPageRoute(
+                  builder: (_) => ProductDetails(
+                        category: 'FRUIT',
+                        title: widget.title,
+                        price: price,
+                        discount: disCount,
+                      )));
+            },
+            child: Container(
+              decoration: BoxDecoration(
+                color: Colors.grey,
+                borderRadius: const BorderRadius.all(
+                  Radius.circular(12),
                 ),
-                child: Stack(
-                  children: [
-                    Positioned(
-                      top: 10,
-                      left: 10,
-                      child: LikeButton(
-                          size: 40,
-                          // likeCount: 0,
-                          likeBuilder: (bool like) {
-                            return like
-                                ? const Icon(Icons.favorite,
-                                    color: Colors.red,
-                                    shadows: <Shadow>[
-                                        Shadow(
-                                            color: Colors.white,
-                                            blurRadius: 15.0)
-                                      ])
-                                : const Icon(
-                                    Icons.favorite,
-                                    color: Color.fromARGB(255, 191, 226, 243),
-                                    shadows: <Shadow>[
+                image: DecorationImage(
+                  image: AssetImage('assets/images/popular_deals/$imgPath'),
+                  fit: BoxFit.cover,
+                ),
+              ),
+              child: Stack(
+                children: [
+                  Positioned(
+                    top: 10,
+                    left: 10,
+                    child: LikeButton(
+                        size: 40,
+                        // likeCount: 0,
+                        likeBuilder: (bool like) {
+                          return like
+                              ? const Icon(Icons.favorite,
+                                  color: Colors.red,
+                                  shadows: <Shadow>[
                                       Shadow(
-                                          color: Colors.red, blurRadius: 15.0)
-                                    ],
-                                  );
-                          }),
-                    ),
-                    Visibility(
-                      visible: (disCount != 0),
-                      child: Positioned(
-                        top: 10,
-                        right: -40,
-                        child: Transform.rotate(
-                          angle: pi / 4,
-                          child: Container(
-                            padding: const EdgeInsets.symmetric(vertical: 5),
-                            alignment: Alignment.center,
-                            width: screenWidth / 3,
-                            color: Colors.red,
-                            child: Text(
-                              '$stringPercent% $textOFF',
-                              style: const TextStyle(
-                                fontSize: 12,
-                                fontWeight: FontWeight.w700,
-                                color: Colors.white,
-                              ),
+                                          color: Colors.white, blurRadius: 15.0)
+                                    ])
+                              : const Icon(
+                                  Icons.favorite,
+                                  color: Color.fromARGB(255, 191, 226, 243),
+                                  shadows: <Shadow>[
+                                    Shadow(color: Colors.red, blurRadius: 15.0)
+                                  ],
+                                );
+                        }),
+                  ),
+                  Visibility(
+                    visible: (disCount != 0),
+                    child: Positioned(
+                      top: 10,
+                      right: -40,
+                      child: Transform.rotate(
+                        angle: pi / 4,
+                        child: Container(
+                          padding: const EdgeInsets.symmetric(vertical: 5),
+                          alignment: Alignment.center,
+                          width: screenWidth / 3,
+                          color: Colors.red,
+                          child: Text(
+                            '$stringPercent% $textOFF',
+                            style: const TextStyle(
+                              fontSize: 12,
+                              fontWeight: FontWeight.w700,
+                              color: Colors.white,
                             ),
                           ),
                         ),
                       ),
                     ),
-                  ],
-                ),
+                  ),
+                ],
               ),
             ),
           ),

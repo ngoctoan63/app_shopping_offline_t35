@@ -5,6 +5,7 @@ import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:progress_state_button/progress_button.dart';
+import 'package:provider/provider.dart';
 
 import '../apps/const/value.dart';
 import '../provider/firebase_provider.dart';
@@ -20,13 +21,10 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   Uint8List? _image;
   bool isSaveProcessing = false;
-  final TextEditingController lastNameController = TextEditingController();
-  final TextEditingController firstNameController = TextEditingController();
   final TextEditingController displayNameController = TextEditingController();
   final TextEditingController emailController = TextEditingController();
 
   ButtonState stateOnlyText = ButtonState.idle;
-
   void selectImage() async {
     Uint8List img = await pickImage(ImageSource.gallery);
     setState(() {
@@ -39,19 +37,14 @@ class _EditProfileState extends State<EditProfile> {
       stateOnlyText = ButtonState.loading;
       isSaveProcessing = true;
     });
-    String lastName = lastNameController.text;
-    String fistName = firstNameController.text;
-    displayName = displayNameController.text;
+    String displayName = displayNameController.text;
     if (_image == null) {
       String resp = await FirebaseProvider().saveProfile(
-        lastName: lastName,
-        firstName: fistName,
-        // _image!?image: _image!,
+        displayName: displayName,
       );
     } else {
       String resp = await FirebaseProvider().saveProfile(
-        lastName: lastName,
-        firstName: fistName,
+        displayName: displayName,
         image: _image!,
       );
     }
@@ -75,16 +68,14 @@ class _EditProfileState extends State<EditProfile> {
 
   @override
   void initState() {
-    emailController.text = email;
-    displayNameController.text = displayName;
-    String a = imgURL;
+    emailController.text = context.read<FirebaseProvider>().userModel.email;
+    displayNameController.text =
+        context.read<FirebaseProvider>().userModel.displayName;
     super.initState();
   }
 
   @override
   void dispose() {
-    lastNameController.dispose();
-    firstNameController.dispose();
     emailController.dispose();
     displayNameController.dispose();
     super.dispose();
@@ -102,105 +93,66 @@ class _EditProfileState extends State<EditProfile> {
           backgroundColor: Theme.of(context).primaryColor,
         ),
         body: Center(
-          child: Container(
-            padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Stack(
-                  children: [
-                    _image != null
-                        ? CircleAvatar(
-                            radius: 75,
-                            backgroundImage: MemoryImage(_image!),
-                          )
-                        : CircleAvatar(
-                            radius: 75,
-                            backgroundImage: imgURL == ''
-                                ? const NetworkImage(textDefaultAva)
-                                // : NetworkImage(imgURL),
-                                : FadeInImage.assetNetwork(
-                                    placeholder: 'assets/Spinner-5.gif',
-                                    image: imgURL,
-                                    fit: BoxFit.cover,
-                                  ).image,
-                          ),
-                    Positioned(
-                      bottom: -10,
-                      left: 100,
-                      child: IconButton(
-                        onPressed: () {
-                          selectImage();
-                        },
-                        icon: const Icon(Icons.add_a_photo),
+          child: SingleChildScrollView(
+            child: Container(
+              padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
+              child: Column(
+                mainAxisAlignment: MainAxisAlignment.center,
+                children: [
+                  Stack(
+                    children: [
+                      _image != null
+                          ? CircleAvatar(
+                              radius: 75,
+                              backgroundImage: MemoryImage(_image!),
+                            )
+                          : CircleAvatar(
+                              radius: 75,
+                              // backgroundImage: imgURL == ''
+                              backgroundImage: '' == ''
+                                  ? const NetworkImage(textDefaultAva)
+                                  // : NetworkImage(imgURL),
+                                  : FadeInImage.assetNetwork(
+                                      placeholder: 'assets/Spinner-5.gif',
+                                      // image: imgURL,
+                                      image: '',
+                                      fit: BoxFit.cover,
+                                    ).image,
+                            ),
+                      Positioned(
+                        bottom: -10,
+                        left: 100,
+                        child: IconButton(
+                          onPressed: () {
+                            selectImage();
+                          },
+                          icon: const Icon(Icons.add_a_photo),
+                        ),
                       ),
-                    ),
-                  ],
-                ),
-                const SizedBox(
-                  height: 25,
-                ),
-                Expanded(
-                    child: Container(
-                  padding: const EdgeInsets.only(top: 20),
-                  child: SingleChildScrollView(
+                    ],
+                  ),
+                  const SizedBox(
+                    height: 25,
+                  ),
+                  Container(
+                    padding: const EdgeInsets.only(top: 20),
                     child: Column(
                       children: [
                         const SizedBox(
                           height: 20,
                         ),
-                        TextField(
-                          controller: lastNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Last Name',
-                            hintText: 'Enter last name',
-                            contentPadding: EdgeInsets.all(10),
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        TextField(
-                          controller: firstNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'First Name',
-                            hintText: 'Enter fist name',
-                            contentPadding: EdgeInsets.all(10),
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark),
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        TextField(
+                        InputTextField(
                           controller: displayNameController,
-                          decoration: const InputDecoration(
-                            labelText: 'Display Name',
-                            hintText: textDisplayNameHint,
-                            contentPadding: EdgeInsets.all(10),
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark),
+                          labelText: textDisplayName,
+                          hintText: textDisplayNameHint,
                         ),
                         const SizedBox(
                           height: 25,
                         ),
-                        TextField(
-                          readOnly: true,
+                        InputTextField(
                           controller: emailController,
-                          decoration: const InputDecoration(
-                            labelText: 'E-mail',
-                            contentPadding: EdgeInsets.all(10),
-                            border: OutlineInputBorder(),
-                          ),
-                          style: TextStyle(
-                              color: Theme.of(context).primaryColorDark),
+                          labelText: 'E-mail',
+                          readonly: true,
                         ),
                         const SizedBox(height: 20),
                         AbsorbPointer(
@@ -278,13 +230,60 @@ class _EditProfileState extends State<EditProfile> {
                         )
                       ],
                     ),
-                  ),
-                ))
-              ],
+                  )
+                ],
+              ),
             ),
           ),
         ),
       ),
+    );
+  }
+}
+
+class InputTextField extends StatefulWidget {
+  const InputTextField({
+    super.key,
+    required this.controller,
+    this.labelText = '',
+    this.hintText = '',
+    this.readonly = false,
+  });
+
+  final TextEditingController controller;
+  final String labelText;
+  final String hintText;
+  final bool readonly;
+
+  @override
+  State<InputTextField> createState() => _InputTextFieldState();
+}
+
+class _InputTextFieldState extends State<InputTextField> {
+  FocusNode focusNode = FocusNode();
+  @override
+  Widget build(BuildContext context) {
+    return TextFormField(
+      readOnly: widget.readonly,
+      onTap: () {},
+      onTapOutside: (event) {
+        print('ccc');
+      },
+      focusNode: focusNode,
+      controller: widget.controller,
+      decoration: InputDecoration(
+        labelStyle: TextStyle(
+            color: Theme.of(context).primaryColorDark.withOpacity(0.5)),
+        labelText: widget.labelText,
+        hintText: widget.hintText,
+        contentPadding: const EdgeInsets.all(10),
+        border: const OutlineInputBorder(),
+        focusedBorder: OutlineInputBorder(
+          borderSide:
+              BorderSide(width: 3, color: Theme.of(context).primaryColor),
+        ),
+      ),
+      style: TextStyle(color: Theme.of(context).primaryColorDark),
     );
   }
 }

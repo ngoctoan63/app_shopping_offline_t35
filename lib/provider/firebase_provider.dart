@@ -3,24 +3,27 @@ import 'dart:typed_data';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_core/firebase_core.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:flutter/material.dart';
 import 'package:shared_preferences/shared_preferences.dart';
 
 import '../apps/const/value.dart';
+import '../model/user_model.dart';
 
 final FirebaseStorage _storage = FirebaseStorage.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-String displayName = "";
-String userId = "";
-String email = "xxx@yyy.com";
-String imgURL = '';
-User? user;
+// String displayName = "";
+// String userId = "";
+// String email = "xxx@yyy.com";
+// String imgURL = '';
+// User? user;
 
 class FirebaseProvider with ChangeNotifier {
-  StreamController<String> emailStreamController =
-      StreamController<String>.broadcast();
-  Stream<String> get emailStream => emailStreamController.stream;
+  late UserModel userModel = UserModel(userId: 'userId', email: 'email');
+  // StreamController<String> emailStreamController =
+  //     StreamController<String>.broadcast();
+  // Stream<String> get emailStream => emailStreamController.stream;
   Future<String> upLoadImageToStorage(String path, Uint8List image) async {
     Reference ref = _storage.ref().child(path);
     UploadTask uploadTask = ref.putData(image);
@@ -30,44 +33,41 @@ class FirebaseProvider with ChangeNotifier {
   }
 
   Future<String> saveProfile({
-    required String firstName,
-    required String lastName,
+    required String displayName,
     Uint8List? image,
   }) async {
     String resp = 'Errors!';
-    try {
-      if (image != null) {
-        imgURL = await upLoadImageToStorage('/profile_image/$userId', image);
-        await user?.updatePhotoURL(imgURL);
-      }
-      await user?.updateDisplayName(displayName);
-      // await _firestore.collection('userABC').add({
-      //   'lastName': lastName,
-      //   'firstName': firstName,
-      //   'imaUrl': imgUrl,
-      // });
-      resp = 'Success!';
-    } catch (e) {
-      resp = e.toString();
-    }
+    // try {
+    //   if (image != null) {
+    //     userModel.imgURL = await upLoadImageToStorage('/profile_image/$userModel.userId', image);
+    //     await user?.updatePhotoURL(userModel.imgURL);
+    //   }
+    //   await user?.updateDisplayName(userModel.displayName);
+    //   if (userId != '') {
+    //     await _firestore.collection(userId).add({
+    //       'lastName': lastName,
+    //       'firstName': firstName,
+    //       'imaUrl': imgURL,
+    //     });
+    //   }
+    //   resp = 'Success!';
+    // } catch (e) {
+    //   resp = e.toString();
+    // }
     return resp;
   }
 
   bool keepSignIn = false;
-  Future<User?> createUser(String emailAddress, String password,
-      [String displayName = '']) async {
+  Future<UserCredential?> register(
+      String email, String password, String displayName) async {
+    UserCredential userCredential;
+    FirebaseApp app = await Firebase.initializeApp(
+        name: 'Secondary', options: Firebase.app().options);
     try {
-      UserCredential credential =
-          await FirebaseAuth.instance.createUserWithEmailAndPassword(
-        email: emailAddress,
-        password: password,
-      );
-      user = FirebaseAuth.instance.currentUser;
-      userId = user!.uid;
-      await user?.updateDisplayName(displayName);
-
-      await FirebaseAuth.instance.signOut();
-      return user;
+      userCredential = await FirebaseAuth.instanceFor(app: app)
+          .createUserWithEmailAndPassword(email: email, password: password);
+      await app.delete();
+      return Future.sync(() => userCredential);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
         throw textPasswordTooWeak;
@@ -78,28 +78,14 @@ class FirebaseProvider with ChangeNotifier {
     } catch (e) {
       print('----ccc--createUser exception:$e');
     }
+
     return null;
   }
 
-  Future<void> signInEmailPass(String email, String password) async {
+  Future<void> signInEmailPass(String mail, String password) async {
     try {
       final credential = await FirebaseAuth.instance
-          .signInWithEmailAndPassword(email: email, password: password);
-      user = FirebaseAuth.instance.currentUser;
-      userId = user!.uid;
-      if (user!.displayName != null) {
-        displayName = user!.displayName!;
-      }
-      if (user?.email! != null) {
-        email = user!.email!;
-      }
-
-      if (user?.photoURL != null) {
-        imgURL = user!.photoURL!;
-      }
-      if (user?.uid != null) {
-        userId = user!.uid;
-      }
+          .signInWithEmailAndPassword(email: mail, password: password);
     } on FirebaseAuthException catch (e) {
       switch (e.code) {
         case 'INVALID_LOGIN_CREDENTIALS':
@@ -125,5 +111,29 @@ class FirebaseProvider with ChangeNotifier {
       print('Exception on sign out!!!!');
       print(e.message);
     }
+  }
+
+  void getFirebaseUserInfo() {
+    String temp = 'xzy@mail.com';
+    User? user = FirebaseAuth.instance.currentUser;
+    userModel.userId = user!.uid;
+    if (user.email != null) {
+      temp = userModel.email = user.email!;
+    }
+    if ((user.displayName?.isNotEmpty ?? false)) {
+      userModel.displayName = user.displayName!;
+    } else {
+      userModel.displayName = temp.substring(0, temp.indexOf('@'));
+    }
+    if ((user.photoURL?.isNotEmpty ?? false)) {
+      userModel.imgURL = user.photoURL!;
+    } else {
+      userModel.imgURL = textDefaultAva;
+    }
+  }
+
+  void cleanUserInfo() {
+    userModel = UserModel(userId: 'userId', email: 'email');
+    print('User info cleaned!');
   }
 }

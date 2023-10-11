@@ -5,7 +5,6 @@ import 'package:shared_preferences/shared_preferences.dart';
 class DataProvider with ChangeNotifier {
   ThemeMode themeMode = ThemeMode.light;
   bool _isLightMode = true;
-  String userName = "Luis A.";
   int isIntroduction = 0;
   int notifyCount = 0;
   List<String> categoriesList = [

@@ -69,15 +69,17 @@ class HomePage extends StatelessWidget {
                                       color:
                                           Theme.of(context).primaryColorDark),
                             ),
-                            Text(
-                              displayName,
-                              style: Theme.of(context)
-                                  .textTheme
-                                  .titleMedium
-                                  ?.copyWith(
-                                      fontSize: 20,
-                                      color:
-                                          Theme.of(context).primaryColorDark),
+                            Consumer<FirebaseProvider>(
+                              builder: (context, value, child) => Text(
+                                value.userModel.displayName,
+                                style: Theme.of(context)
+                                    .textTheme
+                                    .titleMedium
+                                    ?.copyWith(
+                                        fontSize: 20,
+                                        color:
+                                            Theme.of(context).primaryColorDark),
+                              ),
                             )
                           ],
                         ),
