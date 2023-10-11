@@ -1,11 +1,11 @@
-import 'dart:typed_data';
-
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
 import '../../apps/const/value.dart';
 import '../../apps/routers/router_name.dart';
 import '../../provider/data_provider.dart';
+import '../../provider/firebase_provider.dart';
 import 'list_title_item.dart';
 
 class LeftDrawer extends StatefulWidget {
@@ -16,7 +16,6 @@ class LeftDrawer extends StatefulWidget {
 }
 
 class _LeftDrawerState extends State<LeftDrawer> {
-  Uint8List? _image;
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
@@ -37,25 +36,46 @@ class _LeftDrawerState extends State<LeftDrawer> {
                 color: Theme.of(context).primaryColor,
                 child: Padding(
                   padding: const EdgeInsets.only(top: 5),
-                  child: Column(
+                  child: Row(
                     mainAxisAlignment: MainAxisAlignment.center,
                     children: [
-                      _image != null
-                          ? CircleAvatar(
-                              radius: 40,
-                              backgroundImage: MemoryImage(_image!),
-                            )
-                          : const CircleAvatar(
-                              radius: 40,
-                              backgroundImage: NetworkImage(
-                                  'https://m.media-amazon.com/images/M/MV5BMzdjNjExMTgtZGFmNS00ZWRjLWJmNjAtOTliYzJjYjcxMWFhXkEyXkFqcGdeQXVyMjYwNDA2MDE@._V1_.jpg'),
-                            ),
-                      ElevatedButton(
-                          onPressed: () {
+                      Consumer<FirebaseProvider>(
+                        builder: (context, value, child) => InkWell(
+                          onTap: () {
                             Navigator.pushNamed(
                                 context, RouterName.editProfile);
                           },
-                          child: const Text('Edit'))
+                          child: CircleAvatar(
+                            radius: 50,
+                            child: CachedNetworkImage(
+                              imageUrl: value.userModel.imgURL,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                // width: 60.0,
+                                // height: 60.0,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: imageProvider, fit: BoxFit.cover),
+                                ),
+                              ),
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
+                          ),
+                        ),
+                      ),
+                      TextButton(
+                        onPressed: () {
+                          Navigator.pushNamed(context, RouterName.editProfile);
+                        },
+                        child: Text(
+                          'Edit Profile',
+                          style: Theme.of(context).textTheme.titleSmall,
+                        ),
+                      ),
                     ],
                   ),
                 ),

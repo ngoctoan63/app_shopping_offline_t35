@@ -265,10 +265,6 @@ class _InputTextFieldState extends State<InputTextField> {
   Widget build(BuildContext context) {
     return TextFormField(
       readOnly: widget.readonly,
-      onTap: () {},
-      onTapOutside: (event) {
-        print('ccc');
-      },
       focusNode: focusNode,
       controller: widget.controller,
       decoration: InputDecoration(
