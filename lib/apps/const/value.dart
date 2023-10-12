@@ -16,6 +16,8 @@ const String textPasswordLabel = 'Password';
 const String textPasswordHint = 'From 6 to 12 characters';
 const String textEmailLabel = 'E-mail';
 const String textEmailHint = 'Your valid mail address';
+const String textPhone = 'Phone Number';
+const String textPhoneHint = 'Enter phone number';
 // login page
 const String textGroceryApp = 'Grocery App';
 const String textLoginWelcomeBack = 'Welcome back';

@@ -1,19 +1,26 @@
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:confirm_dialog/confirm_dialog.dart';
 import 'package:flutter/material.dart';
 import 'package:fluttertoast/fluttertoast.dart';
 import 'package:image_picker/image_picker.dart';
+import 'package:phone_number/phone_number.dart';
 import 'package:progress_state_button/progress_button.dart';
 import 'package:provider/provider.dart';
 
 import '../apps/const/value.dart';
+import '../apps/routers/router_name.dart';
 import '../provider/firebase_provider.dart';
+import '../utilities/store.dart';
 import '../utilities/utilities_function.dart';
+import '../widgets/zip_text_form_field.dart';
+import 'home/home_page.dart';
 
 class EditProfile extends StatefulWidget {
-  const EditProfile({super.key});
+  EditProfile({super.key});
 
+  final store = Store(PhoneNumberUtil());
   @override
   State<EditProfile> createState() => _EditProfileState();
 }
@@ -21,8 +28,10 @@ class EditProfile extends StatefulWidget {
 class _EditProfileState extends State<EditProfile> {
   Uint8List? _image;
   bool isSaveProcessing = false;
-  final TextEditingController displayNameController = TextEditingController();
-  final TextEditingController emailController = TextEditingController();
+  final formKey = GlobalKey<FormState>();
+  TextEditingController displayNameController = TextEditingController();
+  TextEditingController phoneNumberController = TextEditingController();
+  TextEditingController emailController = TextEditingController();
 
   ButtonState stateOnlyText = ButtonState.idle;
   void selectImage() async {
@@ -37,17 +46,15 @@ class _EditProfileState extends State<EditProfile> {
       stateOnlyText = ButtonState.loading;
       isSaveProcessing = true;
     });
+
     String displayName = displayNameController.text;
-    if (_image == null) {
-      String resp = await FirebaseProvider().saveProfile(
-        displayName: displayName,
-      );
-    } else {
-      String resp = await FirebaseProvider().saveProfile(
-        displayName: displayName,
-        image: _image!,
-      );
-    }
+    String phoneNumber = phoneNumberController.text;
+    String resp = await FirebaseProvider().saveProfile(
+      displayName: displayName,
+      phoneNumber: phoneNumber,
+      image: _image,
+    );
+
     Fluttertoast.showToast(
         msg: textProfileSaved,
         toastLength: Toast.LENGTH_SHORT,
@@ -60,15 +67,29 @@ class _EditProfileState extends State<EditProfile> {
       stateOnlyText = ButtonState.idle;
       isSaveProcessing = false;
     });
-    Navigator.pop(context);
+    // Navigator.pop(context);
+
+    Navigator.pushReplacementNamed(context, RouterName.homePage);
     setState(() {
       stateOnlyText = ButtonState.idle;
+    });
+  }
+
+  void handleOnTapPhone() {
+    setState(() {
+      phoneNumberController = PhoneNumberEditingController.fromValue(
+        widget.store.plugin,
+        phoneNumberController.value,
+        regionCode: 'VN',
+        behavior: PhoneInputBehavior.strict,
+      );
     });
   }
 
   @override
   void initState() {
     emailController.text = context.read<FirebaseProvider>().userModel.email;
+    String img = context.read<FirebaseProvider>().userModel.imgURL;
     displayNameController.text =
         context.read<FirebaseProvider>().userModel.displayName;
     super.initState();
@@ -89,6 +110,15 @@ class _EditProfileState extends State<EditProfile> {
       },
       child: Scaffold(
         appBar: AppBar(
+          leading: IconButton(
+            icon: const Icon(Icons.arrow_back, color: Colors.black),
+            onPressed: () =>
+                // Navigator.pushReplacementNamed(context, RouterName.homePage),
+                Navigator.of(context).pushReplacement(MaterialPageRoute(
+                    builder: (_) => HomePage(
+                          showDrawer: true,
+                        ))),
+          ),
           title: const Text(textProfile),
           backgroundColor: Theme.of(context).primaryColor,
         ),
@@ -101,24 +131,38 @@ class _EditProfileState extends State<EditProfile> {
                 children: [
                   Stack(
                     children: [
-                      _image != null
-                          ? CircleAvatar(
-                              radius: 75,
-                              backgroundImage: MemoryImage(_image!),
-                            )
-                          : CircleAvatar(
-                              radius: 75,
-                              // backgroundImage: imgURL == ''
-                              backgroundImage: '' == ''
-                                  ? const NetworkImage(textDefaultAva)
-                                  // : NetworkImage(imgURL),
-                                  : FadeInImage.assetNetwork(
-                                      placeholder: 'assets/Spinner-5.gif',
-                                      // image: imgURL,
-                                      image: '',
-                                      fit: BoxFit.cover,
-                                    ).image,
-                            ),
+                      Consumer<FirebaseProvider>(
+                        builder: (context, value, child) => InkWell(
+                          onTap: () {
+                            Navigator.pushNamed(
+                                context, RouterName.editProfile);
+                          },
+                          child: _image == null
+                              ? CircleAvatar(
+                                  radius: 75,
+                                  child: CachedNetworkImage(
+                                    imageUrl: value.userModel.imgURL,
+                                    imageBuilder: (context, imageProvider) =>
+                                        Container(
+                                      decoration: BoxDecoration(
+                                        shape: BoxShape.circle,
+                                        image: DecorationImage(
+                                            image: imageProvider,
+                                            fit: BoxFit.cover),
+                                      ),
+                                    ),
+                                    placeholder: (context, url) =>
+                                        const CircularProgressIndicator(),
+                                    errorWidget: (context, url, error) =>
+                                        const Icon(Icons.error),
+                                  ),
+                                )
+                              : CircleAvatar(
+                                  radius: 75,
+                                  backgroundImage: MemoryImage(_image!),
+                                ),
+                        ),
+                      ),
                       Positioned(
                         bottom: -10,
                         left: 100,
@@ -136,99 +180,114 @@ class _EditProfileState extends State<EditProfile> {
                   ),
                   Container(
                     padding: const EdgeInsets.only(top: 20),
-                    child: Column(
-                      children: [
-                        const SizedBox(
-                          height: 20,
-                        ),
-                        InputTextField(
-                          controller: displayNameController,
-                          labelText: textDisplayName,
-                          hintText: textDisplayNameHint,
-                        ),
-                        const SizedBox(
-                          height: 25,
-                        ),
-                        InputTextField(
-                          controller: emailController,
-                          labelText: 'E-mail',
-                          readonly: true,
-                        ),
-                        const SizedBox(height: 20),
-                        AbsorbPointer(
-                          absorbing: isSaveProcessing,
-                          child: ProgressButton(
-                            progressIndicatorAlignment:
-                                MainAxisAlignment.center,
-                            stateWidgets: const {
-                              ButtonState.idle: Text(
-                                textSaveProfile,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontSize: 18,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              ButtonState.loading: Text(
-                                '',
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              ButtonState.fail: Text(
-                                textFail,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
-                              ),
-                              ButtonState.success: Text(
-                                textSuccess,
-                                style: TextStyle(
-                                    color: Colors.white,
-                                    fontWeight: FontWeight.w500),
-                              )
-                            },
-                            stateColors: {
-                              ButtonState.idle: Theme.of(context).primaryColor,
-                              ButtonState.loading: Theme.of(context)
-                                  .primaryColor
-                                  .withOpacity(0.5),
-                              ButtonState.fail: Colors.red.shade300,
-                              ButtonState.success: Colors.green.shade400,
-                            },
-                            // onPressed: saveProfile,
-                            onPressed: () async {
-                              if (await confirm(
-                                context,
-                                content: Text(
-                                  textArrYouSure,
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColorDark,
-                                  ),
-                                ),
-                                textOK: Text(
-                                  textConfirmOK,
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                                textCancel: Text(
-                                  textConfirmCancel,
-                                  style: TextStyle(
-                                    color: Theme.of(context).primaryColor,
-                                    fontSize: 18,
-                                  ),
-                                ),
-                              )) {
-                                print('pressedOK');
-                                saveProfile();
-                              }
-                              return print('pressedCancel');
-                            },
-                            state: stateOnlyText,
+                    child: Form(
+                      key: formKey,
+                      child: Column(
+                        children: [
+                          const SizedBox(
+                            height: 20,
                           ),
-                        )
-                      ],
+                          ZipTextFormField(
+                            controller: displayNameController,
+                            labelText: textDisplayName,
+                            hintText: textDisplayNameHint,
+                          ),
+                          const SizedBox(
+                            height: 20,
+                          ),
+                          ZipTextFormField(
+                            onTap: () {
+                              handleOnTapPhone();
+                            },
+                            controller: phoneNumberController,
+                            labelText: textPhone,
+                            hintText: textPhoneHint,
+                            textInputType: TextInputType.phone,
+                          ),
+                          const SizedBox(
+                            height: 25,
+                          ),
+                          ZipTextFormField(
+                            controller: emailController,
+                            labelText: 'E-mail',
+                            readonly: true,
+                          ),
+                          const SizedBox(height: 20),
+                          AbsorbPointer(
+                            absorbing: isSaveProcessing,
+                            child: ProgressButton(
+                              progressIndicatorAlignment:
+                                  MainAxisAlignment.center,
+                              stateWidgets: const {
+                                ButtonState.idle: Text(
+                                  textSaveProfile,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontSize: 18,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                ButtonState.loading: Text(
+                                  '',
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                ButtonState.fail: Text(
+                                  textFail,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                ),
+                                ButtonState.success: Text(
+                                  textSuccess,
+                                  style: TextStyle(
+                                      color: Colors.white,
+                                      fontWeight: FontWeight.w500),
+                                )
+                              },
+                              stateColors: {
+                                ButtonState.idle:
+                                    Theme.of(context).primaryColor,
+                                ButtonState.loading: Theme.of(context)
+                                    .primaryColor
+                                    .withOpacity(0.5),
+                                ButtonState.fail: Colors.red.shade300,
+                                ButtonState.success: Colors.green.shade400,
+                              },
+                              // onPressed: saveProfile,
+                              onPressed: () async {
+                                if (await confirm(
+                                  context,
+                                  content: Text(
+                                    textArrYouSure,
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColorDark,
+                                    ),
+                                  ),
+                                  textOK: Text(
+                                    textConfirmOK,
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                  textCancel: Text(
+                                    textConfirmCancel,
+                                    style: TextStyle(
+                                      color: Theme.of(context).primaryColor,
+                                      fontSize: 18,
+                                    ),
+                                  ),
+                                )) {
+                                  saveProfile();
+                                }
+                                return print('pressedCancel');
+                              },
+                              state: stateOnlyText,
+                            ),
+                          )
+                        ],
+                      ),
                     ),
                   )
                 ],
@@ -237,49 +296,6 @@ class _EditProfileState extends State<EditProfile> {
           ),
         ),
       ),
-    );
-  }
-}
-
-class InputTextField extends StatefulWidget {
-  const InputTextField({
-    super.key,
-    required this.controller,
-    this.labelText = '',
-    this.hintText = '',
-    this.readonly = false,
-  });
-
-  final TextEditingController controller;
-  final String labelText;
-  final String hintText;
-  final bool readonly;
-
-  @override
-  State<InputTextField> createState() => _InputTextFieldState();
-}
-
-class _InputTextFieldState extends State<InputTextField> {
-  FocusNode focusNode = FocusNode();
-  @override
-  Widget build(BuildContext context) {
-    return TextFormField(
-      readOnly: widget.readonly,
-      focusNode: focusNode,
-      controller: widget.controller,
-      decoration: InputDecoration(
-        labelStyle: TextStyle(
-            color: Theme.of(context).primaryColorDark.withOpacity(0.5)),
-        labelText: widget.labelText,
-        hintText: widget.hintText,
-        contentPadding: const EdgeInsets.all(10),
-        border: const OutlineInputBorder(),
-        focusedBorder: OutlineInputBorder(
-          borderSide:
-              BorderSide(width: 3, color: Theme.of(context).primaryColor),
-        ),
-      ),
-      style: TextStyle(color: Theme.of(context).primaryColorDark),
     );
   }
 }

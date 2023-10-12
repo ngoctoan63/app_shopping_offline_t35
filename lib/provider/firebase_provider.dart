@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:typed_data';
 
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
@@ -13,17 +14,9 @@ import '../model/user_model.dart';
 
 final FirebaseStorage _storage = FirebaseStorage.instance;
 final FirebaseFirestore _firestore = FirebaseFirestore.instance;
-// String displayName = "";
-// String userId = "";
-// String email = "xxx@yyy.com";
-// String imgURL = '';
-// User? user;
 
 class FirebaseProvider with ChangeNotifier {
-  late UserModel userModel = UserModel(userId: 'userId', email: 'email');
-  // StreamController<String> emailStreamController =
-  //     StreamController<String>.broadcast();
-  // Stream<String> get emailStream => emailStreamController.stream;
+  UserModel userModel = UserModel(userId: 'userId', email: 'email');
   Future<String> upLoadImageToStorage(String path, Uint8List image) async {
     Reference ref = _storage.ref().child(path);
     UploadTask uploadTask = ref.putData(image);
@@ -33,27 +26,37 @@ class FirebaseProvider with ChangeNotifier {
   }
 
   Future<String> saveProfile({
-    required String displayName,
+    String displayName = '',
+    String phoneNumber = '',
     Uint8List? image,
   }) async {
     String resp = 'Errors!';
-    // try {
-    //   if (image != null) {
-    //     userModel.imgURL = await upLoadImageToStorage('/profile_image/$userModel.userId', image);
-    //     await user?.updatePhotoURL(userModel.imgURL);
-    //   }
-    //   await user?.updateDisplayName(userModel.displayName);
-    //   if (userId != '') {
-    //     await _firestore.collection(userId).add({
-    //       'lastName': lastName,
-    //       'firstName': firstName,
-    //       'imaUrl': imgURL,
-    //     });
-    //   }
-    //   resp = 'Success!';
-    // } catch (e) {
-    //   resp = e.toString();
-    // }
+    try {
+      userModel.displayName = displayName;
+      userModel.phoneNumber = phoneNumber;
+      User? user = FirebaseAuth.instance.currentUser;
+      getFirebaseUserInfo();
+      String uId = userModel.userId;
+      if (user != null) {
+        if (image != null) {
+          userModel.imgURL = '';
+          userModel.imgURL =
+              await upLoadImageToStorage('/profile_image/$uId', image);
+          await user.updatePhotoURL(userModel.imgURL);
+        }
+        await user.updateDisplayName(userModel.displayName);
+
+        await _firestore.collection('user_profile').doc(uId).set({
+          'displayName': userModel.displayName,
+          'phoneNumber': userModel.phoneNumber,
+          'imgURL': userModel.imgURL,
+        });
+        await CachedNetworkImage.evictFromCache(userModel.imgURL);
+        resp = 'Success!';
+      }
+    } catch (e) {
+      resp = e.toString();
+    }
     return resp;
   }
 

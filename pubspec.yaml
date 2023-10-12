@@ -55,6 +55,7 @@ dependencies:
   cached_network_image: ^3.3.0
   progress_state_button: ^1.0.4
   confirm_dialog: ^1.0.2
+  phone_number: ^2.0.1
 
 dev_dependencies:
   flutter_test:

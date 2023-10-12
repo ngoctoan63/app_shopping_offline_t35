@@ -29,7 +29,7 @@ class RouterCustom {
       case RouterName.productCategories:
         return page(const ProductCategories());
       case RouterName.editProfile:
-        return page(const EditProfile());
+        return page(EditProfile());
       case RouterName.productDetails:
         return page(ProductDetails(
           category: 'General',
