@@ -32,11 +32,12 @@ class FirebaseProvider with ChangeNotifier {
   }) async {
     String resp = 'Errors!';
     try {
+      User? user = FirebaseAuth.instance.currentUser;
+
+      String uId = userModel.userId;
       userModel.displayName = displayName;
       userModel.phoneNumber = phoneNumber;
-      User? user = FirebaseAuth.instance.currentUser;
-      getFirebaseUserInfo();
-      String uId = userModel.userId;
+
       if (user != null) {
         if (image != null) {
           userModel.imgURL = '';
@@ -46,6 +47,9 @@ class FirebaseProvider with ChangeNotifier {
         }
         await user.updateDisplayName(userModel.displayName);
 
+        await user
+            .updatePhoneNumber(userModel.phoneNumber as PhoneAuthCredential);
+
         await _firestore.collection('user_profile').doc(uId).set({
           'displayName': userModel.displayName,
           'phoneNumber': userModel.phoneNumber,
@@ -53,6 +57,7 @@ class FirebaseProvider with ChangeNotifier {
         });
         await CachedNetworkImage.evictFromCache(userModel.imgURL);
         resp = 'Success!';
+        notifyListeners();
       }
     } catch (e) {
       resp = e.toString();
@@ -70,6 +75,8 @@ class FirebaseProvider with ChangeNotifier {
       userCredential = await FirebaseAuth.instanceFor(app: app)
           .createUserWithEmailAndPassword(email: email, password: password);
       await app.delete();
+
+      notifyListeners();
       return Future.sync(() => userCredential);
     } on FirebaseAuthException catch (e) {
       if (e.code == 'weak-password') {
@@ -103,6 +110,8 @@ class FirebaseProvider with ChangeNotifier {
     } catch (e) {
       print('sign in exception:$e');
     }
+
+    notifyListeners();
   }
 
   void signOut() async {
@@ -123,6 +132,9 @@ class FirebaseProvider with ChangeNotifier {
     if (user.email != null) {
       temp = userModel.email = user.email!;
     }
+    if (user.phoneNumber != null) {
+      userModel.phoneNumber = user.phoneNumber!;
+    }
     if ((user.displayName?.isNotEmpty ?? false)) {
       userModel.displayName = user.displayName!;
     } else {
@@ -133,10 +145,14 @@ class FirebaseProvider with ChangeNotifier {
     } else {
       userModel.imgURL = textDefaultAva;
     }
+
+    notifyListeners();
   }
 
   void cleanUserInfo() {
     userModel = UserModel(userId: 'userId', email: 'email');
     print('User info cleaned!');
+
+    notifyListeners();
   }
 }

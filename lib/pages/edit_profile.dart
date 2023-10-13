@@ -67,8 +67,6 @@ class _EditProfileState extends State<EditProfile> {
       stateOnlyText = ButtonState.idle;
       isSaveProcessing = false;
     });
-    // Navigator.pop(context);
-
     Navigator.pushReplacementNamed(context, RouterName.homePage);
     setState(() {
       stateOnlyText = ButtonState.idle;
@@ -89,7 +87,8 @@ class _EditProfileState extends State<EditProfile> {
   @override
   void initState() {
     emailController.text = context.read<FirebaseProvider>().userModel.email;
-    String img = context.read<FirebaseProvider>().userModel.imgURL;
+    phoneNumberController.text =
+        context.read<FirebaseProvider>().userModel.phoneNumber;
     displayNameController.text =
         context.read<FirebaseProvider>().userModel.displayName;
     super.initState();
@@ -113,7 +112,6 @@ class _EditProfileState extends State<EditProfile> {
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
             onPressed: () =>
-                // Navigator.pushReplacementNamed(context, RouterName.homePage),
                 Navigator.of(context).pushReplacement(MaterialPageRoute(
                     builder: (_) => HomePage(
                           showDrawer: true,
@@ -126,13 +124,13 @@ class _EditProfileState extends State<EditProfile> {
           child: SingleChildScrollView(
             child: Container(
               padding: const EdgeInsets.symmetric(horizontal: 25, vertical: 30),
-              child: Column(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  Stack(
-                    children: [
-                      Consumer<FirebaseProvider>(
-                        builder: (context, value, child) => InkWell(
+              child: Consumer<FirebaseProvider>(
+                builder: (context, value, child) => Column(
+                  mainAxisAlignment: MainAxisAlignment.center,
+                  children: [
+                    Stack(
+                      children: [
+                        InkWell(
                           onTap: () {
                             Navigator.pushNamed(
                                 context, RouterName.editProfile);
@@ -162,135 +160,136 @@ class _EditProfileState extends State<EditProfile> {
                                   backgroundImage: MemoryImage(_image!),
                                 ),
                         ),
-                      ),
-                      Positioned(
-                        bottom: -10,
-                        left: 100,
-                        child: IconButton(
-                          onPressed: () {
-                            selectImage();
-                          },
-                          icon: const Icon(Icons.add_a_photo),
+                        Positioned(
+                          bottom: -10,
+                          left: 100,
+                          child: IconButton(
+                            onPressed: () {
+                              selectImage();
+                            },
+                            icon: const Icon(Icons.add_a_photo),
+                          ),
+                        ),
+                      ],
+                    ),
+                    const SizedBox(
+                      height: 25,
+                    ),
+                    Container(
+                      padding: const EdgeInsets.only(top: 20),
+                      child: Form(
+                        key: formKey,
+                        child: Column(
+                          children: [
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            ZipTextFormField(
+                              controller: displayNameController,
+                              labelText: textDisplayName,
+                              hintText: textDisplayNameHint,
+                            ),
+                            const SizedBox(
+                              height: 20,
+                            ),
+                            ZipTextFormField(
+                              onTap: () {
+                                handleOnTapPhone();
+                              },
+                              controller: phoneNumberController,
+                              labelText: textPhone,
+                              hintText: textPhoneHint,
+                              textInputType: TextInputType.phone,
+                            ),
+                            const SizedBox(
+                              height: 25,
+                            ),
+                            ZipTextFormField(
+                              controller: emailController,
+                              labelText: 'E-mail',
+                              readonly: true,
+                            ),
+                            const SizedBox(height: 20),
+                            AbsorbPointer(
+                              absorbing: isSaveProcessing,
+                              child: ProgressButton(
+                                progressIndicatorAlignment:
+                                    MainAxisAlignment.center,
+                                stateWidgets: const {
+                                  ButtonState.idle: Text(
+                                    textSaveProfile,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontSize: 18,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  ButtonState.loading: Text(
+                                    '',
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  ButtonState.fail: Text(
+                                    textFail,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  ),
+                                  ButtonState.success: Text(
+                                    textSuccess,
+                                    style: TextStyle(
+                                        color: Colors.white,
+                                        fontWeight: FontWeight.w500),
+                                  )
+                                },
+                                stateColors: {
+                                  ButtonState.idle:
+                                      Theme.of(context).primaryColor,
+                                  ButtonState.loading: Theme.of(context)
+                                      .primaryColor
+                                      .withOpacity(0.5),
+                                  ButtonState.fail: Colors.red.shade300,
+                                  ButtonState.success: Colors.green.shade400,
+                                },
+                                // onPressed: saveProfile,
+                                onPressed: () async {
+                                  if (await confirm(
+                                    context,
+                                    content: Text(
+                                      textArrYouSure,
+                                      style: TextStyle(
+                                        color:
+                                            Theme.of(context).primaryColorDark,
+                                      ),
+                                    ),
+                                    textOK: Text(
+                                      textConfirmOK,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                    textCancel: Text(
+                                      textConfirmCancel,
+                                      style: TextStyle(
+                                        color: Theme.of(context).primaryColor,
+                                        fontSize: 18,
+                                      ),
+                                    ),
+                                  )) {
+                                    saveProfile();
+                                  }
+                                  return print('pressedCancel');
+                                },
+                                state: stateOnlyText,
+                              ),
+                            )
+                          ],
                         ),
                       ),
-                    ],
-                  ),
-                  const SizedBox(
-                    height: 25,
-                  ),
-                  Container(
-                    padding: const EdgeInsets.only(top: 20),
-                    child: Form(
-                      key: formKey,
-                      child: Column(
-                        children: [
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          ZipTextFormField(
-                            controller: displayNameController,
-                            labelText: textDisplayName,
-                            hintText: textDisplayNameHint,
-                          ),
-                          const SizedBox(
-                            height: 20,
-                          ),
-                          ZipTextFormField(
-                            onTap: () {
-                              handleOnTapPhone();
-                            },
-                            controller: phoneNumberController,
-                            labelText: textPhone,
-                            hintText: textPhoneHint,
-                            textInputType: TextInputType.phone,
-                          ),
-                          const SizedBox(
-                            height: 25,
-                          ),
-                          ZipTextFormField(
-                            controller: emailController,
-                            labelText: 'E-mail',
-                            readonly: true,
-                          ),
-                          const SizedBox(height: 20),
-                          AbsorbPointer(
-                            absorbing: isSaveProcessing,
-                            child: ProgressButton(
-                              progressIndicatorAlignment:
-                                  MainAxisAlignment.center,
-                              stateWidgets: const {
-                                ButtonState.idle: Text(
-                                  textSaveProfile,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontSize: 18,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                ButtonState.loading: Text(
-                                  '',
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                ButtonState.fail: Text(
-                                  textFail,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                ),
-                                ButtonState.success: Text(
-                                  textSuccess,
-                                  style: TextStyle(
-                                      color: Colors.white,
-                                      fontWeight: FontWeight.w500),
-                                )
-                              },
-                              stateColors: {
-                                ButtonState.idle:
-                                    Theme.of(context).primaryColor,
-                                ButtonState.loading: Theme.of(context)
-                                    .primaryColor
-                                    .withOpacity(0.5),
-                                ButtonState.fail: Colors.red.shade300,
-                                ButtonState.success: Colors.green.shade400,
-                              },
-                              // onPressed: saveProfile,
-                              onPressed: () async {
-                                if (await confirm(
-                                  context,
-                                  content: Text(
-                                    textArrYouSure,
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColorDark,
-                                    ),
-                                  ),
-                                  textOK: Text(
-                                    textConfirmOK,
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                  textCancel: Text(
-                                    textConfirmCancel,
-                                    style: TextStyle(
-                                      color: Theme.of(context).primaryColor,
-                                      fontSize: 18,
-                                    ),
-                                  ),
-                                )) {
-                                  saveProfile();
-                                }
-                                return print('pressedCancel');
-                              },
-                              state: stateOnlyText,
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  )
-                ],
+                    )
+                  ],
+                ),
               ),
             ),
           ),

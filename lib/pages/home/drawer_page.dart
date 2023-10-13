@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:provider/provider.dart';
 
@@ -41,34 +42,34 @@ class _LeftDrawerState extends State<LeftDrawer> {
                       Consumer<FirebaseProvider>(
                         builder: (context, value, child) => InkWell(
                           onTap: () {
-                            // Navigator.pushNamed(
-                            //     context, RouterName.editProfile);
+                            Navigator.pushNamed(
+                                context, RouterName.editProfile);
                           },
                           child: CircleAvatar(
                             radius: 50,
-                            //   child: CachedNetworkImage(
-                            //     imageUrl: value.userModel.imgURL,
-                            //     imageBuilder: (context, imageProvider) =>
-                            //         Container(
-                            //       // width: 60.0,
-                            //       // height: 60.0,
-                            //       decoration: BoxDecoration(
-                            //         shape: BoxShape.circle,
-                            //         image: DecorationImage(
-                            //             image: imageProvider, fit: BoxFit.cover),
-                            //       ),
-                            //     ),
-                            //     placeholder: (context, url) =>
-                            //         const CircularProgressIndicator(),
-                            //     errorWidget: (context, url, error) =>
-                            //         const Icon(Icons.error),
-                            //   ),
-                            child: Image.network(value.userModel.imgURL),
+                            child: CachedNetworkImage(
+                              imageUrl: value.userModel.imgURL,
+                              imageBuilder: (context, imageProvider) =>
+                                  Container(
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  image: DecorationImage(
+                                      image: imageProvider, fit: BoxFit.cover),
+                                ),
+                              ),
+                              placeholder: (context, url) =>
+                                  const CircularProgressIndicator(),
+                              errorWidget: (context, url, error) =>
+                                  const Icon(Icons.error),
+                            ),
                           ),
                         ),
                       ),
                       TextButton(
                         onPressed: () {
+                          context
+                              .read<FirebaseProvider>()
+                              .getFirebaseUserInfo();
                           Navigator.pushReplacementNamed(
                               context, RouterName.editProfile);
                           // .pushNamed(context, RouterName.editProfile);
