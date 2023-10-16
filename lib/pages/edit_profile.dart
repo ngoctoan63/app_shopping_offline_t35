@@ -15,7 +15,6 @@ import '../provider/firebase_provider.dart';
 import '../utilities/store.dart';
 import '../utilities/utilities_function.dart';
 import '../widgets/zip_text_form_field.dart';
-import 'home/home_page.dart';
 
 class EditProfile extends StatefulWidget {
   EditProfile({super.key});
@@ -111,11 +110,7 @@ class _EditProfileState extends State<EditProfile> {
         appBar: AppBar(
           leading: IconButton(
             icon: const Icon(Icons.arrow_back, color: Colors.black),
-            onPressed: () =>
-                Navigator.of(context).pushReplacement(MaterialPageRoute(
-                    builder: (_) => HomePage(
-                          showDrawer: true,
-                        ))),
+            onPressed: () => Navigator.pop(context),
           ),
           title: const Text(textProfile),
           backgroundColor: Theme.of(context).primaryColor,
@@ -132,8 +127,8 @@ class _EditProfileState extends State<EditProfile> {
                       children: [
                         InkWell(
                           onTap: () {
-                            Navigator.pushNamed(
-                                context, RouterName.editProfile);
+                            // Navigator.pushNamed(
+                            //     context, RouterName.editProfile);
                           },
                           child: _image == null
                               ? CircleAvatar(

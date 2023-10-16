@@ -1,4 +1,5 @@
 import 'package:carousel_slider/carousel_slider.dart';
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:denshihanbai/pages/home/bottom_navigate.dart';
 import 'package:denshihanbai/pages/home/categories.dart';
 import 'package:draggable_fab/draggable_fab.dart';
@@ -9,7 +10,6 @@ import '../../apps/const/value.dart';
 import '../../provider/data_provider.dart';
 import '../../provider/firebase_provider.dart';
 import '../products.dart';
-import 'drawer_page.dart';
 import 'popular_deals.dart';
 
 class HomePage extends StatefulWidget {
@@ -40,12 +40,6 @@ class _HomePageState extends State<HomePage> {
     return Scaffold(
       key: scaffoldKey,
       backgroundColor: Theme.of(context).primaryColorLight,
-      drawer: SizedBox(
-        width: screenWidth,
-        child: const Drawer(
-          child: LeftDrawer(),
-        ),
-      ),
       body: Column(
         mainAxisAlignment: MainAxisAlignment.start,
         children: [
@@ -75,18 +69,51 @@ class _HomePageState extends State<HomePage> {
                                       color:
                                           Theme.of(context).primaryColorDark),
                             ),
+                            // Consumer<FirebaseProvider>(
+                            //   builder: (context, value, child) => Text(
+                            //     value.userModel.displayName,
+                            //     style: Theme.of(context)
+                            //         .textTheme
+                            //         .titleMedium
+                            //         ?.copyWith(
+                            //             fontSize: 20,
+                            //             color:
+                            //                 Theme.of(context).primaryColorDark),
+                            //   ),
+                            // )
                             Consumer<FirebaseProvider>(
-                              builder: (context, value, child) => Text(
-                                value.userModel.displayName,
-                                style: Theme.of(context)
-                                    .textTheme
-                                    .titleMedium
-                                    ?.copyWith(
-                                        fontSize: 20,
-                                        color:
-                                            Theme.of(context).primaryColorDark),
+                              builder: (context, value, child) => StreamBuilder<
+                                  DocumentSnapshot<Map<String, dynamic>>>(
+                                stream: value.usersStream,
+                                builder: (BuildContext context,
+                                    AsyncSnapshot<
+                                            DocumentSnapshot<
+                                                Map<String, dynamic>>>
+                                        snapshot) {
+                                  String fullName = '';
+                                  if (snapshot.data != null) {
+                                    fullName = snapshot.data!['displayName'];
+                                  }
+                                  if (snapshot.hasError) {
+                                    return const Text('Something went wrong');
+                                  }
+
+                                  if (snapshot.connectionState ==
+                                      ConnectionState.waiting) {
+                                    return const Text("Loading");
+                                  }
+
+                                  return Text(fullName,
+                                      style: Theme.of(context)
+                                          .textTheme
+                                          .titleMedium
+                                          ?.copyWith(
+                                              fontSize: 20,
+                                              color: Theme.of(context)
+                                                  .primaryColor));
+                                },
                               ),
-                            )
+                            ),
                           ],
                         ),
                         Wrap(

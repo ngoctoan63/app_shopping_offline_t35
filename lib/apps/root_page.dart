@@ -40,6 +40,7 @@ class _RootPageState extends State<RootPage> {
     if (FirebaseAuth.instance.currentUser != null) {
       // signed in
       widget.isLogin = true;
+      context.read<FirebaseProvider>().getUserInfo();
     } else {
       // signed out
     }
@@ -62,7 +63,7 @@ class _RootPageState extends State<RootPage> {
               context.read<FirebaseProvider>().cleanUserInfo();
               return const SignInPage();
             }
-            context.read<FirebaseProvider>().getFirebaseUserInfo();
+            // context.read<FirebaseProvider>().getFirebaseUserInfo('toannn');
             return HomePage();
           } else {
             return const Scaffold(

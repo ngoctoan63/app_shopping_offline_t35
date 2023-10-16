@@ -8,4 +8,5 @@ class RouterName {
   static const String productPage = '/ProductPage';
   static const String productDetails = '/ProductDetails';
   static const String editProfile = '/EditProfile';
+  static const String userPage = '/UserPage';
 }

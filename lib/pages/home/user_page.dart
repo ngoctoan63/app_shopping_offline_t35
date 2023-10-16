@@ -8,21 +8,21 @@ import '../../provider/data_provider.dart';
 import '../../provider/firebase_provider.dart';
 import 'list_title_item.dart';
 
-class LeftDrawer extends StatefulWidget {
-  const LeftDrawer({super.key});
+class UserPage extends StatefulWidget {
+  const UserPage({super.key});
 
   @override
-  State<LeftDrawer> createState() => _LeftDrawerState();
+  State<UserPage> createState() => _UserPageState();
 }
 
-class _LeftDrawerState extends State<LeftDrawer> {
+class _UserPageState extends State<UserPage> {
   @override
   Widget build(BuildContext context) {
     double screenWidth = MediaQuery.of(context).size.width;
     double screenHeight = MediaQuery.of(context).size.height;
     return SafeArea(
-      child: Drawer(
-        child: Container(
+      child: Scaffold(
+        body: Container(
           decoration: BoxDecoration(
             color: Theme.of(context).primaryColorLight,
           ),
@@ -67,9 +67,9 @@ class _LeftDrawerState extends State<LeftDrawer> {
                       ),
                       TextButton(
                         onPressed: () {
-                          context
-                              .read<FirebaseProvider>()
-                              .getFirebaseUserInfo();
+                          // context
+                          // .read<FirebaseProvider>()
+                          // .getFirebaseUserInfo();
                           Navigator.pushReplacementNamed(
                               context, RouterName.editProfile);
                           // .pushNamed(context, RouterName.editProfile);
@@ -154,7 +154,7 @@ class _LeftDrawerState extends State<LeftDrawer> {
               ),
               ListTile(
                 onTap: () {
-                  Scaffold.of(context).closeDrawer();
+                  Navigator.pop(context);
                 },
                 title: const Align(
                     alignment: Alignment.centerLeft,

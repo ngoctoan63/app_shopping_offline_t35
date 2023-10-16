@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 
+import '../../apps/routers/router_name.dart';
+
 class BottomNavigate extends StatefulWidget {
   const BottomNavigate({
     super.key,
@@ -17,8 +19,14 @@ class _BottomNavigateState extends State<BottomNavigate> {
       selectedIndex = index;
     });
     if (index == 4) {
-      Scaffold.of(context).openDrawer();
+      // Scaffold.of(context).openDrawer();
+      Navigator.pushNamed(context, RouterName.userPage);
       selectedIndex = 0;
+    } else if (index == 3) {
+      // context.read<FirebaseProvider>().addUser('Toan', 'GPN', '40');
+    } else if (index == 2) {
+      // Navigator.of(context)
+      // .push(MaterialPageRoute(builder: (_) => const UserInformation()));
     }
   }
 
